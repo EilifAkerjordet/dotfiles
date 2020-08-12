@@ -231,18 +231,8 @@ let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 """""""""""""""""""FZF""""""""""""""""""""""""""""""""""
 """""""""""""""""""EMMET"""""""""""""""""""""""""""""
-function! TabComplete()
-  if emmet#isExpandable()
-    return "\<plug>(emmet-expand-abbr)"
-  else
-    return "\<tab>"
-  endif
-endfunction
-
 let g:user_emmet_leader_key='<C-c>'
-imap <expr> <tab> TabComplete()
-smap <expr> <tab> TabComplete()
-xmap <expr> <tab> TabComplete()
+imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 """""""""""""""""""EMMET"""""""""""""""""""""""""""""
 """""""""""""""""""EASY MOTION""""""""""""""""""""""""""
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
