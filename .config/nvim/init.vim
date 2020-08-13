@@ -232,7 +232,8 @@ let g:fzf_history_dir = '~/.local/share/fzf-history'
 """""""""""""""""""FZF""""""""""""""""""""""""""""""""""
 """""""""""""""""""EMMET"""""""""""""""""""""""""""""
 let g:user_emmet_leader_key='<C-c>'
-imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+nmap <expr> <Tab> emmet#expandAbbrIntelligent("\<tab>")
+imap <expr> <Tab> emmet#expandAbbrIntelligent("\<tab>")
 """""""""""""""""""EMMET"""""""""""""""""""""""""""""
 """""""""""""""""""EASY MOTION""""""""""""""""""""""""""
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
