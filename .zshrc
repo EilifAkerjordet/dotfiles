@@ -28,14 +28,13 @@ SPACESHIP_USER_SHOW="true"
 bindkey -r "^K"
 bindkey -r "^J"
 
-alias ls=colorls — tree — light
 alias lc=colorls — tree — light
 alias v="nvim"
 alias zshr="source ~/.zshrc"
 alias n="node"
 alias cl="clear"
+alias s="sudo"
 alias weather="curl wttr.in/"
-alias noe="echo wttr.in/ $1"
 alias r="ranger"
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 
