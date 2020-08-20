@@ -68,7 +68,7 @@ let g:calendar_google_calendar = 1
 let g:calendar_google_task = 1
 let g:bracey_server_allow_remote_connections = 1
 
-v KEY MAPS START
+ " KEY MAPS START
 let mapleader = " "
 nnoremap <C-s> :w<CR>
 nnoremap <C-w> :wq<CR>

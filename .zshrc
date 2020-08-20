@@ -3,6 +3,7 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
+
 PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
 source $(dirname $(gem which colorls))/tab_complete.sh
 KEYTIMEOUT=1
@@ -42,3 +43,5 @@ source $ZSH/oh-my-zsh.sh
 neofetch
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export EDITOR=/usr/bin/nvim
+export VISUAL=/usr/bin/nvim

@@ -389,6 +389,12 @@ globalkeys = my_table.join(
     awful.key({ modkey, "Shift" }, "d", function () lain.util.delete_tag() end,
               {description = "delete tag", group = "tag"}),
 
+
+    -- My dmenu scripts (Alt+Ctrl+Key)
+    awful.key({ altkey, "Control" }, "e", function () awful.util.spawn( "./.dmenu/dmenu-edit-configs.sh" ) end,
+        {description = "edit config files" , group = "dmenu scripts" }),
+
+
     -- Standard program
     awful.key({ altkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
@@ -398,6 +404,8 @@ globalkeys = my_table.join(
         beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
 	end,
     {description = "show dmenu", group = "hotkeys"}),
+    awful.key({ altkey, }, "r", function () awful.spawn( "alacritty --class floating-term -d 130 50 -e ranger" ) end,
+              {description = "spawn ranger" , group = "gui apps" }),
     awful.key({ altkey, }, "b", function () awful.util.spawn( "brave" ) end,
               {description = "surf web browser" , group = "gui apps" }),
     awful.key({ altkey, }, "m", function () awful.util.spawn( "spotify" ) end,
@@ -722,6 +730,15 @@ awful.rules.rules = {
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
+    { rule_any = { instance = {"floating-term"} },
+    properties = {
+        screen    = awful.screen.focused,
+        tag       = mouse.screen.selected_tag,
+        width     = 1300,
+        placement = awful.placement.centered,
+        floating  = true
+    }
+},
 }
 -- }}}
 
@@ -805,6 +822,7 @@ awful.spawn.with_shell("picom --config  $HOME/.config/picom/picom.conf")
 awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("volumeicon")
 awful.spawn.with_shell("redshift")
+awful.spawn.with_shell("pavucontrol")
 awful.spawn.with_shell("setxkbmap -option 'caps:ctrl_modifier'")
 awful.spawn.with_shell("xcape -e 'Caps_Lock=Escape'")
 awful.util.spawn_with_shell("~/.config/awesome/scripts/locker.sh&")
