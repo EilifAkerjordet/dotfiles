@@ -394,6 +394,12 @@ globalkeys = my_table.join(
     awful.key({ altkey, "Control" }, "e", function () awful.util.spawn( "./.dmenu/dmenu-edit-configs.sh" ) end,
         {description = "edit config files" , group = "dmenu scripts" }),
 
+    awful.key({ modkey, }, "r", function () awful.util.spawn( "./.dmenu/restart.sh" ) end,
+        {description = "edit config files" , group = "dmenu scripts" }),
+
+    awful.key({ modkey, }, "p", function () awful.util.spawn( "./.dmenu/poweroff.sh" ) end,
+        {description = "edit config files" , group = "dmenu scripts" }),
+
 
     -- Standard program
     awful.key({ altkey,           }, "Return", function () awful.spawn(terminal) end,
@@ -404,10 +410,16 @@ globalkeys = my_table.join(
         beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
 	end,
     {description = "show dmenu", group = "hotkeys"}),
-    awful.key({ altkey, }, "r", function () awful.spawn( "alacritty --class floating-term -d 130 50 -e ranger" ) end,
+    awful.key({ altkey, }, "r", function () awful.spawn( "alacritty --class floating-term -d 120 30 -e ranger" ) end,
               {description = "spawn ranger" , group = "gui apps" }),
+    awful.key({ altkey, }, "t", function () awful.spawn( "alacritty --class floating-term -d 120 30 -e spt" ) end,
+              {description = "spawn spotify-tui" , group = "gui apps" }),
     awful.key({ altkey, }, "b", function () awful.util.spawn( "brave" ) end,
               {description = "surf web browser" , group = "gui apps" }),
+    awful.key({ altkey, }, "s", function () awful.util.spawn( "slack" ) end,
+              {description = "spawn slack" , group = "gui apps" }),
+    awful.key({ altkey, }, "d", function () awful.util.spawn( "discord" ) end,
+              {description = "spawn discord" , group = "gui apps" }),
     awful.key({ altkey, }, "m", function () awful.util.spawn( "spotify" ) end,
               {description = "run spotify" , group = "gui apps" }),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
@@ -576,9 +588,6 @@ globalkeys = my_table.join(
         end,
         {description = "show rofi", group = "launcher"}),
     --]]
-    -- Prompt
-    awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"}),
 
     awful.key({ modkey }, "x",
               function ()
@@ -822,7 +831,7 @@ awful.spawn.with_shell("picom --config  $HOME/.config/picom/picom.conf")
 awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("volumeicon")
 awful.spawn.with_shell("redshift")
-awful.spawn.with_shell("pavucontrol")
+awful.spawn.with_shell("spotifyd")
 awful.spawn.with_shell("setxkbmap -option 'caps:ctrl_modifier'")
 awful.spawn.with_shell("xcape -e 'Caps_Lock=Escape'")
 awful.util.spawn_with_shell("~/.config/awesome/scripts/locker.sh&")
