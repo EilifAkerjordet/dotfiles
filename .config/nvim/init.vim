@@ -1,7 +1,6 @@
 call plug#begin('~/local/share/nvim/plugged')
  Plug 'neoclide/coc.nvim', {'branch': 'release'}
  Plug 'sheerun/vim-polyglot'
- Plug 'easymotion/vim-easymotion'
  Plug 'SirVer/ultisnips'
  Plug 'pechorin/any-jump.vim'
  Plug 'mattn/emmet-vim'
@@ -19,7 +18,7 @@ call plug#begin('~/local/share/nvim/plugged')
  Plug 'christoomey/vim-tmux-navigator'
  Plug 'benmills/vimux'
  Plug 'mlaursen/vim-react-snippets'
- Plug 'ap/vim-css-color'
+ Plug 'norcalli/nvim-colorizer.lua'
  Plug 'jiangmiao/auto-pairs'
  Plug 'preservim/nerdcommenter'
  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -30,6 +29,7 @@ call plug#begin('~/local/share/nvim/plugged')
  Plug 'airblade/vim-rooter'
  Plug 'vimwiki/vimwiki'
  Plug 'tpope/vim-fugitive'
+ Plug 'unblevable/quick-scope'
  Plug 'kevinhwang91/rnvimr'
  Plug 'miyakogi/seiya.vim'
  Plug 'othree/yajs.vim'
@@ -90,7 +90,7 @@ nmap <Leader>rv :source $MYVIMRC<CR>
 map <Leader>af :ALEFix eslint<CR>
 nmap <Leader>vbg :VimBeGood<CR>
 nmap <Leader>k :RnvimrToggle<CR>
-nmap <C-p> :Files<CR>
+nmap <C-p> :GFiles<CR>
 nmap / :BLines<CR>
 nmap <C-m> :Rg<CR>
 
@@ -232,23 +232,21 @@ let g:fzf_history_dir = '~/.local/share/fzf-history'
 """""""""""""""""""FZF""""""""""""""""""""""""""""""""""
 """""""""""""""""""EMMET"""""""""""""""""""""""""""""
 let g:user_emmet_leader_key='<C-c>'
-nmap <expr> <Tab> emmet#expandAbbrIntelligent("\<tab>")
-imap <expr> <Tab> emmet#expandAbbrIntelligent("\<tab>")
+nmap <expr> <C-l> emmet#expandAbbrIntelligent("\<C-l>")
+imap <expr> <C-l> emmet#expandAbbrIntelligent("\<C-l>")
 """""""""""""""""""EMMET"""""""""""""""""""""""""""""
-"""""""""""""""""""EASY MOTION""""""""""""""""""""""""""
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-
-" Jump to anywhere you want with minimal keystrokes, with just one key binding.
-" `s{char}{label}`
-" Turn on case-insensitive feature
-let g:EasyMotion_smartcase = 1
-
-map z <Plug>(easymotion-bd-w)
-nmap z <Plug>(easymotion-overwin-w)
-"""""""""""""""""""EASY MOTION""""""""""""""""""""""""""
 """""""""""""""""""ANy-JUMP"""""""""""""""""""""""""""""
 let g:any_jump_list_numbers=0
 """""""""""""""""""ANy-JUMP"""""""""""""""""""""""""""""
+"""""""""""""""""""QuickScope"""""""""""""""""""""""""""
+augroup qs_colors
+  autocmd!
+  autocmd ColorScheme * highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+  autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+augroup END
+
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+"""""""""""""""""""QuickScope"""""""""""""""""""""""""""
 
 
 if exists('+termguicolors')

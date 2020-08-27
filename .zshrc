@@ -36,6 +36,7 @@ alias n="node"
 alias cl="clear"
 alias s="sudo"
 alias weather="curl wttr.in/"
+alias glyphs="sh ~/applications/siji/view.sh"
 alias r="ranger"
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 
@@ -44,4 +45,6 @@ neofetch
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export EDITOR=/usr/bin/nvim
+export TERMINAL=/usr/bin/alacritty
+export BROWSER=/usr/bin/brave
 export VISUAL=/usr/bin/nvim

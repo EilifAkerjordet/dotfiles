@@ -408,7 +408,7 @@ globalkeys = my_table.join(
     function ()
         awful.spawn(string.format("dmenu_run",
         beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
-	end,
+        end,
     {description = "show dmenu", group = "hotkeys"}),
     awful.key({ altkey, }, "r", function () awful.spawn( "alacritty --class floating-term -d 120 30 -e ranger" ) end,
               {description = "spawn ranger" , group = "gui apps" }),
