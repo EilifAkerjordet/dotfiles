@@ -14,6 +14,10 @@ alt + d
 alt + m
 	spotify
 
+# Dmenu Scripts
+ctrl + alt + e
+        ./.dmenu/dmenu-edit-configs.sh
+
 # Media keys
 XF86MonBrightnessUp
         light -A 15
