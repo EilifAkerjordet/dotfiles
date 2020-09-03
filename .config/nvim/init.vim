@@ -47,12 +47,15 @@ set sw=2
 set hidden
 set nobackup
 set nowritebackup
-set cmdheight=2
+set cmdheight=1
 set updatetime=300
 set shortmess+=c
 set signcolumn=no
 set splitbelow splitright
+set laststatus=0
+set noshowmode
 
+let g:bufferline_echo = 0
 let b:ale_fixers = {'javascript': ['eslint']}
 let g:ale_fix_on_save = 1
 let g:ale_sign_error = '❌'
@@ -247,7 +250,6 @@ augroup END
 
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 """""""""""""""""""QuickScope"""""""""""""""""""""""""""
-
 
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"

@@ -1,17 +1,21 @@
 # Applications
-alt + Return
+super + Return
 	alacritty
+alt + Return
+	bspc rule -a \* -o state=floating && alacritty --config-file $HOME/.config/alacritty/alacritty-floating.yml
 alt + space
 	dmenu_run
-alt + b
+super + b
 	brave
 alt + r
 	bspc rule -a \* -o state=floating && alacritty -e ranger
-alt + s
+super + s
 	slack
-alt + d
+alt + l
+	./Games-Wine/scripts/launchLeague.sh &
+super + d
 	discord
-alt + m
+super + m
 	spotify
 
 # Dmenu Scripts
@@ -20,13 +24,13 @@ ctrl + alt + e
 
 # Media keys
 XF86MonBrightnessUp
-        light -A 15
+        light -A 10
 XF86MonBrightnessDown
-        light -U 15
+        light -U 10
 XF86AudioRaiseVolume
-        amixer set 'Master' 15%+
+        sh -c "pactl set-sink-mute 0 false ; pactl set-sink-volume 0 +5%"
 XF86AudioLowerVolume
-        amixer set 'Master' 15%-
+        sh -c "pactl set-sink-mute 0 false ; pactl set-sink-volume 0 -5%"
 XF86AudioMute
         pactl set-sink-mute 0 toggle
 
@@ -43,27 +47,17 @@ super + alt + {q,r}
 	bspc {quit,wm -r}
 
 # close and kill
+super + p
+	bspc node -c
+# close and kill
 alt + q
 	bspc node -c
 
-# alternate between the tiled and monocle layout
-super + m
-	bspc desktop -l next
-
-# send the newest marked node to the newest preselected node
-super + y
-	bspc node newest.marked.local -n newest.!automatic.local
-
-# swap the current node and the biggest window
-super + g
-	bspc node -s biggest.window
-
-#
 # state/flags
 #
 
 # set the window state
-super + {t,shift + t,s,f}
+super + {t,shift + t,y,f}
 	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
 # set the node flags
@@ -77,10 +71,6 @@ super + ctrl + {m,x,y,z}
 # focus the node in the given direction
 super + {_,shift + }{h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
-
-# focus the node for the given path jump
-super + {p,b,comma,period}
-	bspc node -f @{parent,brother,first,second}
 
 # focus the next/previous window in the current desktop
 super + {_,shift + }c

@@ -1,18 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
-declare options=("yes
-quit")
-
-choice=$(echo -e "${options[@]}" | dmenu -i -p 'Power off?')
-
-case "$choice" in
-	quit)
-		echo "Program terminated." && exit 1
-	;;
-	yes)
-		sudo poweroff
-	;;
-	*)
-		exit 1
-	;;
-esac
+choice= echo -e "Yes\nNo" | dmenu -i -p "Power Off?"
+if [[ $choice ==: "yes" ]]; then echo "hei"; fi
