@@ -1,16 +1,16 @@
 call plug#begin('~/local/share/nvim/plugged')
  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+ Plug 'alampros/vim-styled-jsx'
  Plug 'sheerun/vim-polyglot'
  Plug 'SirVer/ultisnips'
  Plug 'pechorin/any-jump.vim'
  Plug 'mattn/emmet-vim'
  Plug 'w0rp/ale'
- Plug 'MaxMEllon/vim-jsx-pretty'
+ Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+ Plug 'hail2u/vim-css3-syntax'
  Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
- Plug 'pangloss/vim-javascript'
  Plug 'sbdchd/neoformat'
  Plug 'tpope/vim-sensible'
- Plug 'lifepillar/vim-solarized8'
  Plug 'hzchirs/vim-material'
  Plug 'vim-airline/vim-airline'
  Plug 'justinmk/vim-sneak'
@@ -18,11 +18,9 @@ call plug#begin('~/local/share/nvim/plugged')
  Plug 'christoomey/vim-tmux-navigator'
  Plug 'benmills/vimux'
  Plug 'mlaursen/vim-react-snippets'
+ Plug 'tpope/vim-commentary'
  Plug 'norcalli/nvim-colorizer.lua'
  Plug 'jiangmiao/auto-pairs'
- Plug 'preservim/nerdcommenter'
- Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
- Plug 'itchyny/calendar.vim'
  Plug 'ThePrimeagen/vim-be-good', { 'do': './install.sh' }
  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
  Plug 'junegunn/fzf.vim'
@@ -32,7 +30,6 @@ call plug#begin('~/local/share/nvim/plugged')
  Plug 'unblevable/quick-scope'
  Plug 'kevinhwang91/rnvimr'
  Plug 'miyakogi/seiya.vim'
- Plug 'othree/yajs.vim'
  Plug 'turbio/bracey.vim'
  Plug 'yuttie/comfortable-motion.vim'
  " NEEDS TO BE LAST TO LOAD "
@@ -44,6 +41,8 @@ set relativenumber
 set expandtab
 set sts=2
 set sw=2
+set cursorline
+set laststatus=2
 set hidden
 set nobackup
 set nowritebackup
@@ -90,12 +89,15 @@ nmap <Leader>gj :diffget //3<CR>
 nmap <Leader>gf :diffget //2<CR>
 
 nmap <Leader>rv :source $MYVIMRC<CR>
-map <Leader>af :ALEFix eslint<CR>
+map <Leader>af :ALEFix standard<CR>
 nmap <Leader>vbg :VimBeGood<CR>
 nmap <Leader>k :RnvimrToggle<CR>
 nmap <C-p> :GFiles<CR>
 nmap / :BLines<CR>
 nmap <C-m> :Rg<CR>
+
+vmap <C-_> gc
+nmap <C-_> gcc
 
 " Vim wiki
 
