@@ -1,0 +1,81 @@
+--- Turn off automatic import of Maude's BOOL module:
+set protect BOOL off .
+
+--- Read the file with your modules:
+in oblig1.maude
+
+--- Maybe here you need a comand a la "select MODULE-NAME ."
+select NAT1 .
+red s(s(s(s(s(0))))) monus s(s(0)) .
+red s(s(0)) monus s(s(s(0))) .
+red s(0) monus s(0) .
+
+--- red max(s(0), s(0)) .
+red min(s(0), s(0)) .
+--- red max(0, s(s(s(0)))) .
+red min(0, s(s(s(0)))) .
+--- red max(s(s(s(s(0)))), s(s(0))) .
+red min(s(s(s(s(0)))), s(s(0))) .
+
+red odd(0) .
+red even(0) .
+red odd(s(s(s(s(0))))) .      --- 4
+red even(s(s(s(s(0))))) .     --- 4
+red odd(s(s(s(s(s(0)))))) .   --- 5
+red even(s(s(s(s(s(0)))))) .  --- 5
+
+
+select EX10 .
+red empty?(nil) .
+red rest(nil) .
+red last(nil) .
+red reverse(nil) .
+red empty?(nil s(0)) .
+red rest(nil s(0)) .
+red last(nil s(0)) .
+red reverse(nil s(0)) .
+red empty?(nil s(s(s(0))) s(0) s(s(0))) .
+red rest(nil s(s(s(0))) s(0) s(s(0))) .
+red last(nil s(s(s(0))) s(0) s(s(0))) .
+red reverse(nil s(s(s(0))) s(0) s(s(0))) .
+
+
+select EX13 .
+red inorder(bintree(empty, s(s(s(s(0)))),
+                    bintree(empty, s(s(s(s(s(s(s(0))))))), empty))) .
+red postorder(bintree(empty, s(s(s(s(0)))),
+              bintree(empty, s(s(s(s(s(s(s(0))))))), empty))) .
+red weight(bintree(empty, s(s(s(s(0)))),
+                   bintree(empty, s(s(s(s(s(s(s(0))))))), empty))) .
+red reverse(bintree(empty, s(s(s(s(0)))),
+                    bintree(empty, s(s(s(s(s(s(s(0))))))), empty))) .
+red inorder(empty) .
+red postorder(empty) .
+red weight(empty) .
+red reverse(empty) .
+red inorder(bintree(bintree(empty, s(s(0)),
+                            bintree(empty, s(s(s(0))), empty)),
+            s(s(s(s(0)))),
+            bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty),
+                    s(s(s(s(s(s(s(0))))))),
+                   bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty)))) .
+red postorder(bintree(bintree(empty, s(s(0)),
+                            bintree(empty, s(s(s(0))), empty)),
+            s(s(s(s(0)))),
+            bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty),
+                    s(s(s(s(s(s(s(0))))))),
+                   bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty)))) .
+red weight(bintree(bintree(empty, s(s(0)),
+                            bintree(empty, s(s(s(0))), empty)),
+            s(s(s(s(0)))),
+            bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty),
+                    s(s(s(s(s(s(s(0))))))),
+                   bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty)))) .
+red reverse(bintree(bintree(empty, s(s(0)),
+                            bintree(empty, s(s(s(0))), empty)),
+            s(s(s(s(0)))),
+            bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty),
+                    s(s(s(s(s(s(s(0))))))),
+
+
+                   bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty)))) .

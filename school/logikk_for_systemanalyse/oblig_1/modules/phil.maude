@@ -1,0 +1,239 @@
+load full-maude26.maude
+
+
+(omod DINING-PHILOSOPHERS is
+  protecting NAT .
+
+  msg chopstick : Nat -> Msg .    *** chopsticks are messages
+
+  class Philosopher | state : State, #sticks : Nat, 
+                      #eats : Nat .
+
+  subsort Nat < Oid .    *** Object names are numbers!
+
+  sort State .
+  ops thinking hungry eating : -> State [ctor] .
+
+  vars I J K : Nat . 
+
+  rl [hungry] : < I : Philosopher | state : thinking >  =>  
+                < I : Philosopher | state : hungry > .
+
+  crl [grabfirst] : chopstick(J)
+                    < I : Philosopher | state : hungry, #sticks : 0 >  =>
+                    < I : Philosopher | state : hungry, #sticks : 1 >
+                       if I can use stick J .
+
+  op right : Nat -> Nat . *** The ``right'' chopstick index.
+  eq right(I) = if I == 5 then 1 else I + 1 fi .
+  op _can`use`stick_ : Nat Nat -> Bool .
+  eq I can use stick J = (I == J) or (J == right(I)) .
+
+  crl [grabSecond] : chopstick(J)
+                     < I : Philosopher | #sticks : 1, #eats : K >  =>
+                     < I : Philosopher | state : eating, #sticks : 2,
+                                         #eats : K + 1 >
+                        if I can use stick J .
+
+  rl [full] :  < I : Philosopher | state : eating >  =>
+               < I : Philosopher | state : thinking, #sticks : 0 >
+               chopstick(I)  chopstick(right(I)) .
+
+  op initState : -> Configuration .
+  eq initState =
+      chopstick(1)  
+      < 1 : Philosopher | state : thinking, #sticks : 0, #eats : 0 > 
+      chopstick(2)  
+      < 2 : Philosopher | state : thinking, #sticks : 0, #eats : 0 > 
+      chopstick(3)  
+      < 3 : Philosopher | state : thinking, #sticks : 0, #eats : 0 > 
+      chopstick(4)  
+      < 4 : Philosopher | state : thinking, #sticks : 0, #eats : 0 > 
+      chopstick(5)  
+      < 5 : Philosopher | state : thinking, #sticks : 0, #eats : 0 > .
+endom)
+
+(rew [1000] initState .)
+
+(frew [1000] initState .)
+
+
+***(search [1] 
+    initState 
+   =>* 
+    C:Configuration
+    < 1 : Philosopher | #eats : s s N1:Nat > 
+    < 2 : Philosopher | #eats : s s N2:Nat > 
+    < 3 : Philosopher | #eats : s s N3:Nat > 
+    < 4 : Philosopher | #eats : s s N4:Nat > 
+    < 5 : Philosopher | #eats : s s N5:Nat > .)
+
+--- takes too long!!
+
+
+***(search [1] 
+    initState 
+   =>* 
+    C:Configuration
+    < P1:Nat : Philosopher | #eats : s s N1:Nat > 
+    < P2:Nat : Philosopher | #eats : s s N2:Nat > 
+    < P3:Nat : Philosopher | #eats : s s N3:Nat > 
+    < P4:Nat : Philosopher | #eats : 0 > .)
+ --- goes quickly
+
+
+
+
+
+
+
+(frew [100] initState .)
+
+(search [1] initState =>! C:Configuration .)
+
+
+
+(omod DIN-PHIL-GRAB-BOTH-STICKS is 
+  protecting NAT .
+
+  msg chopstick : Nat -> Msg .    *** chopsticks are messages
+
+  class Philosopher | state : State, #eats : Nat .
+
+  subsort Nat < Oid .    *** Object names are numbers!
+
+  sort State .
+  ops thinking hungry eating : -> State [ctor] .
+
+  vars I J K : Nat . 
+
+  rl [hungry] : < I : Philosopher | state : thinking >  =>  
+                < I : Philosopher | state : hungry > .
+
+  crl [grabBoth] : chopstick(I)  chopstick(J)
+                    < I : Philosopher | state : hungry, #eats : K >  =>
+                    < I : Philosopher | state : eating, #eats : K + 1 >
+                       if J == right(I) .
+
+  op right : Nat -> Nat . *** The ``right'' chopstick index.
+  eq right(I) = if I == 5 then 1 else I + 1 fi .
+
+  rl [full] :  < I : Philosopher | state : eating >  =>
+               < I : Philosopher | state : thinking >
+               chopstick(I)  chopstick(right(I)) .
+
+  op initState : -> Configuration .
+  eq initState =
+      chopstick(1)  
+      < 1 : Philosopher | state : thinking, #eats : 0 > 
+      chopstick(2)  
+      < 2 : Philosopher | state : thinking, #eats : 0 > 
+      chopstick(3)  
+      < 3 : Philosopher | state : thinking, #eats : 0 > 
+      chopstick(4)  
+      < 4 : Philosopher | state : thinking, #eats : 0 > 
+      chopstick(5)  
+      < 5 : Philosopher | state : thinking, #eats : 0 > .
+endom)
+
+(search [1] initState =>! C:Configuration .)
+
+
+
+--- omit #eats attribute:
+
+(omod DIN-PHIL-GRAB-BOTH-STICKS-2 is 
+  protecting NAT .
+
+  msg chopstick : Nat -> Msg .    *** chopsticks are messages
+
+  class Philosopher | state : State .
+
+  subsort Nat < Oid .    *** Object names are numbers!
+
+  sort State .
+  ops thinking hungry eating : -> State [ctor] .
+
+  vars I J K : Nat . 
+
+  rl [hungry] : < I : Philosopher | state : thinking >  =>  
+                < I : Philosopher | state : hungry > .
+
+  crl [grabBoth] : chopstick(I)  chopstick(J)
+                    < I : Philosopher | state : hungry >  =>
+                    < I : Philosopher | state : eating >
+                       if J == right(I) .
+
+  op right : Nat -> Nat . *** The ``right'' chopstick index.
+  eq right(I) = if I == 5 then 1 else I + 1 fi .
+
+  rl [full] :  < I : Philosopher | state : eating >  =>
+               < I : Philosopher | state : thinking >
+               chopstick(I)  chopstick(right(I)) .
+
+  op initState : -> Configuration .
+  eq initState =
+      chopstick(1)  < 1 : Philosopher | state : thinking > 
+      chopstick(2)  < 2 : Philosopher | state : thinking > 
+      chopstick(3)  < 3 : Philosopher | state : thinking > 
+      chopstick(4)  < 4 : Philosopher | state : thinking > 
+      chopstick(5)  < 5 : Philosopher | state : thinking > .
+endom)
+
+(search [1] initState =>! C:Configuration .)
+
+eof
+
+
+(omod DINING-PHILOSOPHERS-WITH-DOORMAN is
+  protecting DINING-PHILOSOPHERS .
+
+  *** Declaring the whole "house" with doorman:
+  class DinPhilHouse | diningRoom : Configuration, noInDinRoom : Nat,
+                       library : Configuration .
+
+  op GlobalSystem : -> Oid [ctor] .
+
+  var O : Oid .  vars C C' : Configuration .  vars I K : Nat .
+
+  crl [enterDinRoom] :
+      < O : DinPhilHouse | diningRoom : C, noInDinRoom : K, 
+                           library : 
+                               (< I : Philosopher | state : hungry >  C') > 
+         =>
+      < O : DinPhilHouse | diningRoom : (< I : Philosopher | >  C), 
+                           noInDinRoom : K + 1, library : C' > 
+         if K < 4 .
+
+  rl [enterLibrary] :
+     < O : DinPhilHouse | diningRoom : 
+                              (< I : Philosopher | state : thinking >  C), 
+                          noInDinRoom : s K, library : C' > 
+        =>
+     < O : DinPhilHouse | diningRoom : C, noInDinRoom : K, 
+                          library : (< I : Philosopher | > C') > .
+
+  *** Initial state:
+  op initState2 : -> Object .
+  eq initState2 =
+      < GlobalSystem : DinPhilHouse | 
+            diningRoom : chopstick(1)  chopstick(2)  chopstick(3)
+                         chopstick(4)  chopstick(5),
+            noInDinRoom : 0,
+            library :  
+               (< 1 : Philosopher | state : thinking, #sticks : 0, 
+                                    #eats : 0 > 
+                < 2 : Philosopher | state : thinking, #sticks : 0, 
+                                    #eats : 0 > 
+                < 3 : Philosopher | state : thinking, #sticks : 0, 
+                                    #eats : 0 > 
+                < 4 : Philosopher | state : thinking, #sticks : 0, 
+                                    #eats : 0 > 
+                < 5 : Philosopher | state : thinking, #sticks : 0, 
+                                    #eats : 0 >) > .
+endom)
+        
+
+--- (select DINING-PHILOSOPHERS .)
+
+(rew [100] initState2 .)

@@ -1,0 +1,62 @@
+\documentclass{in1150-innlevering}
+\title{Innleveringsoppgave 2 i IN1150}
+\author{Eilif Akerjordet}
+\date{22. januar 2021}
+\begin{document}
+\maketitle
+
+\section*{Oppgave 1}
+\begin{deloppgaver}
+    \item
+      \[
+        \begin{array}{cc|ccc|ccc}
+          P&Q&(P&\imp& Q)&(\neg P&\lor& Q)\\\midrule
+          \T&\T&\T&\T&\T&\F&\T&\T\\
+          \T&\F&\T&\F&\F&\F&\F&\F\\
+          \F&\T&\F&\T&\T&\T&\T&\T\\
+          \F&\F&\F&\T&\F&\T&\T&\F
+        \end{array}
+      \]
+    \item
+      \[
+        \begin{array}{cc|ccc|ccc}
+          P&Q&(P&\imp& Q)&(\neg P&\lor& Q)\\\midrule
+          \T&\T&\T&\rem{a}{\T}&\T&\F&\rem{c}{\T}&\T\\
+          \T&\F&\T&\F&\F&\F&\F&\F\\
+          \F&\T&\F&\T&\T&\T&\T&\T\\
+          \F&\F&\F&\rem{b}{\T}&\F&\T&\rem{d}{\T}&\F
+          \tikz[blue,remember picture,overlay,line width=2.75ex,opacity=0.33,line cap=rect]\draw (a.center) -- (b.center);
+          \tikz[blue,remember picture,overlay,line width=2.75ex,opacity=0.33,line cap=rect]\draw (c.center) -- (d.center);
+        \end{array}
+      \]
+    \item
+      \[
+        \begin{array}{cc|ccc|c}
+          P&Q&(P&\imp& Q)&Q\\\midrule
+          \T&\T&\T&\T&\T&\T\\
+          \T&\F&\T&\F&\F&\F\\
+          \F&\T&\F&\T&\T&\T\\
+          \F&\F&\F&\rem{a}{\T}&\F&\rem{b}{\F}
+          \tikz[red,remember picture,overlay,line width=2.75ex,opacity=0.33,line cap=rect]\draw (a.west) -- (a.east);
+          \tikz[red,remember picture,overlay,line width=2.75ex,opacity=0.33,line cap=rect]\draw (b.west) -- (b.east);
+        \end{array}
+      \]
+\end{deloppgaver}
+\section*{Oppgave 2}
+\begin{deloppgaver}
+    \item
+        \tikz[mikro]{\dxA\dxB\nota{\emptyset}}\hfil
+        \tikz[mikro]{\fxA\dxA\dxB\nota{A}}\hfil
+        \tikz[mikro]{\fxB\dxA\dxB\nota{B}}\hfil
+        \tikz[mikro]{\fxA\fxB\dxA\dxB\nota{A\cup B}}\hfil
+        \tikz[mikro]{\begin{scope}\clA\clB\fxA\fxB\end{scope}\dxA\dxB\nota{A\cap B}}\hfil
+        \tikz[mikro]{\begin{scope}[even odd rule]\clAB\fxA\end{scope}\dxA\dxB\nota{A\setminus B}}\hfil
+        \tikz[mikro]{\begin{scope}[even odd rule]\clAB\fxB\end{scope}\dxA\dxB\nota{B\setminus A}}
+
+    \item
+        \tikz[mikro]{\dxA\dxB\dxC\nota{\emptyset}}\hfil
+        \tikz[mikro]{\fxA\fxB\fxC\dxA\dxB\dxC\nota{A\cup B\cup C}}\hfil
+        \tikz[mikro]{\begin{scope}[even odd rule]\clAB\clABC\fxA\end{scope}\dxA\dxB\dxC\nota{(A\setminus B)\setminus C}}%
+\end{deloppgaver}
+
+\end{document}

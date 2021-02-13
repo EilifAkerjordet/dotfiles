@@ -1,0 +1,27 @@
+set include BOOL off .
+
+load modules/nat-mult.maude
+load modules/less-than.maude
+fmod NAT1 is
+  protecting NAT< .
+  ops _monus_ min : Nat Nat -> Nat .
+  ops odd even : Nat -> Boolean .
+  ops _<=_ _>_ _>=_ _==_ : Nat Nat -> Boolean .
+endfm
+
+load modules/boolean.maude
+fmod BOOLEAN1 is
+  protecting BOOLEAN .
+  op _implies_ : Boolean Boolean -> Boolean [prec 61] .
+  op if_then_else_fi : Boolean Boolean Boolean -> Boolean .
+endfm
+
+load modules/list-nat1-public.maude
+fmod EX10 is
+  protecting LIST-NAT1 .
+endfm
+
+load modules/bintree-public.maude
+fmod EX13 is
+  protecting BINTREE-NAT1 .
+endfm

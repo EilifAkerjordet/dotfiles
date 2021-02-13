@@ -1,0 +1,93 @@
+\documentclass{in1150-innlevering}
+\title{Innleveringsoppgave 3 i IN1150}
+\author{Eilif Akerjordet}
+\date{5. februar 2021}
+\begin{document}
+\maketitle
+
+\section*{Oppgave 1}
+\begin{deloppgaver}
+    \item
+        Påstand: Alle oddetall større enn 51 er primtall.
+        \begin{itemize}
+            \item 55 er et oddetall større enn 51.
+            \item 5 er hverken 55 eller 1.
+            \item $\frac{55}{5} = 11$, som er et heltall.
+            \item Påstanden er dermed usann.
+        \end{itemize}
+    \item
+        Påstand: Alle formler for $F$ slik at $\neg F$ er en kontradiksjon er gyldig.
+        \begin{itemize}
+            \item Vi antar at $F$ er sann.
+            \item Dette gjør $\neg F$ usann.
+            \item Ved samme mynt antar vi at F er usann.
+            \item Dette gjør $\neg F$ sann.
+            \item Påstanden er dermed sann.
+        \end{itemize}
+    \item
+        Påstand: Alle tautologier har minst to konnektiver.
+        \begin{itemize}
+            \item $P \imp P$ er en tautologi.
+            \item $P \imp P$ har kun 1 konnektiv.
+            \item Påstanden er dermed usann.
+        \end{itemize}
+    \item
+        Påstand: Alle formler for $F$ slik at både $F$ og $\neg F$ er oppfyllbare er kontradiksjoner.
+        \begin{itemize}
+            \item Anta at $F$ og $(F \imp \neg F)$ er sanne samtidig.
+            \item Da finnes det en valuasjon som gjør $F$ sann og $(F \imp \neg F)$ sann.
+            \item $\imp$-formler betyr at valuasjonen medfører at $\neg F$ er sann.
+            \item Definisjonen av $\neg$ medfører at $F$ er usann.
+            \item Dette er ikke mulig, da vi har antatt at valuasjonen gjør $F$ sann.
+            \item Påstanden er dermed sann.
+        \end{itemize}
+\end{deloppgaver}
+\section*{Oppgave 2}
+    \begin{itemize}
+        \item
+            Som følger av påstanden valuasjonen $v$ gjør formelen $F$ sann $(b)$ følger påstanden om at det finnes en valuasjon som gjør formelen $F$ sann $(a)$ som en logisk konsekvens.  \item
+            Hvis alle valuasjoner gjør formelen $F$ sann $(c)$, følger det som en logisk konsekvens av dette at det finnes ingen valuasjon som gjør formelen $F$ usann $(d)$. Det samme gjelder den andre veien også. Man kan derfor si at disse to påstandene er logiske konsekvenser av hverandre.
+    \end{itemize}
+
+\section*{Oppgave 3}
+\section*{Oppgave 4}
+    \begin{itemize}
+        \item
+            Anta for motsigelse at påstanden om at $P \imp (Q \imp P)$ er en tautologi ikke holder.
+        \item
+            Da må det finnes en valuasjon som gjør påstanden usann.
+        \item
+            Den eneste måten å gjøre denne valuasjonen usann på er ved det tilfellet at $(Q \imp P)$ er usann, og $P$ er usann.
+        \item
+            For at dette skal holde, må $P$ være sann.
+        \item
+            Dette blir en kontradiksjon. $P$ kan ikke være sann og usann samtidig.
+        \item
+            Dermed holder påstanden. $P \imp (Q \imp P)$ er en tautologi.
+    \end{itemize}
+
+\section*{Oppgave 5}
+    Mengden $\{1,2,3,a,b\}$ har følgende relasjoner:
+    \begin{deloppgaver}
+        \item Anti-symmetrisk
+        \item Refleksiv
+        \item Symmetrisk
+        \item Transitiv, irrefleksiv
+    \end{deloppgaver}
+
+\section*{Oppgave 6}
+    \begin{itemize}
+        \item $R = \{<17,1>,<15,3>,<15,1>,<12,6>,<12,3>,<12,1>,<7,1>,<6,3>,<6,1>,<3,1>\}$
+        \item
+            R er anti-symmetrisk, irrefleksiv og transitiv.
+    \end{itemize}
+\section*{Oppgave 7}
+    \begin{deloppgaver}
+        \item $R = \{<1,1>,<2,2>,<3,3>,<1,2>,<2,1>,<2,3>,<3,2>\}$
+        \item $R = \{<1,2>,<2,1>,<2,3>,<3,2>,<1,3>\}$
+        \item $R = \{<1,2>,<2,1>,<2,3>,<3,2>,<1,3>\}$
+        \item $R = \{<1,2>,<2,1>,<2,3>,<3,2>\}$
+    \end{deloppgaver}
+
+\section*{Oppgave 8}
+\end{document}

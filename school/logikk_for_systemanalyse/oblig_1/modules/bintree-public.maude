@@ -1,0 +1,58 @@
+load list-nat1.maude
+
+fmod BINTREE-NAT1 is
+  protecting BOOLEAN .
+  protecting NAT1 .
+  protecting LIST-NAT1 .
+ 
+  sort BinTree .
+  op empty : -> BinTree [ctor] .
+  op bintree : BinTree Nat BinTree -> BinTree [ctor] .
+  ops preorder inorder postorder : BinTree -> List .
+  ops size weight : BinTree -> Nat .
+  op isSearchTree : BinTree -> Boolean .
+  op reverse : BinTree -> BinTree .
+
+  vars BT BT' : BinTree .
+  vars N N' : Nat .
+  eq preorder(empty) = nil .
+  eq preorder(bintree(BT, N, BT')) = 
+        insertFront(N,          *** Root first, then left and right subtrees:
+                    concat(preorder(BT), preorder(BT'))) .
+  --- ...
+  eq size(empty) = 0 .
+  eq size(bintree(BT, N, BT')) = s(0) + (size(BT) + size(BT')) .
+endfm
+
+*** Define some trees to test:
+***(    Commented out!
+fmod TEST-BINTREE-NAT1 is
+  protecting BINTREE-NAT1 .
+  ops tree1 tree2 : -> BinTree .  *** The first one corresponds to one in book
+  eq tree1 = bintree(
+              bintree(empty, s(s(0)), bintree(empty, s(s(s(0))), empty)),
+              s(s(s(s(0)))),
+              bintree(
+                bintree(empty, s(s(s(s(s(s(0)))))), empty),
+                s(s(s(s(s(s(s(0))))))),
+                bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty))) .
+  eq tree2 = bintree(
+              bintree(empty, s(s(0)), bintree(empty, s(s(s(0))), empty)),
+              s(s(s(s(0)))),
+              bintree(
+                bintree(empty, s(s(s(s(s(s(0)))))), empty),
+                s(s(s(s(s(0))))),
+                bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty))) .
+endfm
+
+red preorder(tree1) .
+red inorder(tree1) .
+red postorder(tree1) .
+red size(tree1) .
+red weight(tree1) .
+red isSearchTree(tree1) .
+red isSearchTree(tree2) .
+red reverse(tree1) .
+
+)***
+

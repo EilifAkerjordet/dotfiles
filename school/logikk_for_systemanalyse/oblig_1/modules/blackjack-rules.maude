@@ -1,0 +1,457 @@
+
+
+
+fmod CARDS is  
+  sorts Suit Value Card .
+  ops 2 3 4 5 6 7 8 9 10 J Q K A : -> Value [ctor] .
+  ops spades hearts clubs diamonds : -> Suit [ctor] .
+  op <_,_> : Suit Value -> Card [ctor] .
+
+  sort Cards .
+  subsort Card < Cards .
+  op nil : -> Cards [ctor] .
+  op _::_ : Cards Cards -> Cards [assoc id: nil ctor] .
+  op deck : -> Cards .
+  eq deck = generate(spades) :: generate(hearts) :: 
+                 generate(diamonds) :: generate(clubs) .
+
+  op generate : Suit -> Cards .
+  --- generate(S) generates all cards of suit S
+
+  var S : Suit .
+  eq generate(S) = < S, 2 > :: < S, 3 > :: < S, 4 > :: < S, 5 > ::
+                  < S, 6 > :: < S, 7 > :: < S, 8 > :: < S, 9 > ::
+                  < S, 10 > :: < S, J > :: < S, Q > :: < S, K > ::
+                  < S, A > .
+endfm
+
+
+
+
+--- ---------------
+
+fmod RESULT is 
+  protecting CARDS + NAT .
+  ops leastValue largestValue : Card -> Nat .
+
+  var F : Suit .   var V : Value .
+
+  eq leastValue(< F, 2 >) = 2 .
+  eq leastValue(< F, 3 >) = 3 .
+  eq leastValue(< F, 4 >) = 4 .
+  eq leastValue(< F, 5 >) = 5 .
+  eq leastValue(< F, 6 >) = 6 .
+  eq leastValue(< F, 7 >) = 7 .
+  eq leastValue(< F, 8 >) = 8 .
+  eq leastValue(< F, 9 >) = 9 .
+  eq leastValue(< F, 10 >) = 10 .
+  eq leastValue(< F, J >) = 10 .
+  eq leastValue(< F, Q >) = 10 .
+  eq leastValue(< F, K >) = 10 .
+  eq leastValue(< F, A >) = 1 .
+
+  eq largestValue(< F, V >) = if V == A then 11 else leastValue(< F, V >) fi .
+
+  ops leastValue largestValue bestValue : Cards -> Nat .
+
+  vars CARD CARD' CARD'' : Card .
+  vars HAND PLAYER DEALER : Cards .
+  var BET : Nat .
+
+  eq leastValue(nil) = 0 .
+  ceq leastValue(CARD :: HAND) = leastValue(CARD) + leastValue(HAND)
+        if HAND =/= nil .
+
+  eq largestValue(nil) = 0 .
+  ceq largestValue(CARD :: HAND) = largestValue(CARD) + largestValue(HAND)
+        if HAND =/= nil .
+
+  eq bestValue(HAND) = if leastValue(HAND) =/= largestValue(HAND)
+                            and leastValue(HAND) <= 11
+                            then leastValue(HAND) + 10
+                         else leastValue(HAND) fi .
+
+  op blackJack : Cards -> Bool .
+
+  eq blackJack(CARD :: CARD') = bestValue(CARD :: CARD') == 21 .
+  ceq blackJack(HAND) = false if bestValue(HAND) =/= 21 .
+  --- tre eller flere kort gir ikkje blackJack:
+  eq blackJack(CARD :: CARD' :: CARD'' :: HAND) = false .
+
+  op result : Cards Cards Nat -> Nat .
+  --- usage: result(spillersHand, bankensHand, innsats)
+
+  eq result(PLAYER, DEALER, BET) = 
+        if blackJack(PLAYER) and (not blackJack(DEALER))
+        --- spiller har black-jack, banken ikke        
+        then (5 * BET) quo 2
+        else
+           --- spiller enkel gevinst
+           (if bestValue(PLAYER) <= 21 and
+               (bestValue(PLAYER) > bestValue(DEALER)
+                or
+                leastValue(DEALER) > 21)
+            then (BET + BET)
+            else 
+               --- sjekker f?rst uavgjort:
+               (if (blackJack(PLAYER) and blackJack(DEALER)) 
+                   or  
+                   ((not blackJack(DEALER))
+                    and
+                    (bestValue(PLAYER) <= 21)
+                    and (bestValue(PLAYER) == bestValue(DEALER)))
+                then BET
+                else 0   --- lost game 
+                fi)
+            fi)
+         fi .     
+endfm
+
+
+
+
+
+--- ------------------
+
+--- Hjelpefunksjoner. Merk at random-funksjonen under tilfredstiller
+---   er n? ny. Vi bruker Maude's random funksjon
+--- Disse skulle IKKE skrives til eksamen.
+
+fmod RANDOM-CARD is 
+  protecting RANDOM + CARDS .  
+
+  --- define a "random" function to pick a "random" card,
+  --- and some helpful functions
+  --- provide the interface to students, and ask them to specify
+  --- 'remove'
+  --- gi med sign for 'random' og 'getRandomCard'
+
+  var N : Nat .   vars CARD CARD' : Card .
+  var HAND : Cards .
+
+  --- fjern et kort fra en haand (om kortet er der!)
+  op remove : Card Cards -> Cards .
+  eq remove(CARD, nil) = nil .
+  eq remove(CARD, CARD' :: HAND) =
+       if CARD == CARD' then HAND
+       else CARD' :: remove(CARD, HAND) fi .
+
+  op size : Cards -> Nat .  --- no of cards in a hand
+  eq size(nil) = 0 .
+  eq size(CARD :: HAND) = s(size(HAND)) .
+
+  op getNthCard : Nat Cards ~> Card .  --- get Nth card from hand
+  eq getNthCard(0, CARD :: HAND) = CARD .
+  eq getNthCard(s N, CARD :: HAND) = getNthCard(N, HAND) .
+
+  op getRandomCard : Cards Nat ~> Card .
+  --- usage: getRandomCard(haand, seedForRandomFunction)
+  eq getRandomCard(HAND, N) = 
+        getNthCard(random(N) rem size(HAND), HAND) .
+endfm
+
+
+
+load full-maude26
+
+
+
+(omod PLAY-BJ is
+  protecting RESULT + RANDOM-CARD .
+
+  class Table | shoe : Cards, rndIndex : Nat, turn : Oid .
+  class Player | hand : Cards, bet : Nat .
+  class Dealer | hand : Cards .
+
+  vars CARD CARD2 : Card .
+  vars CARDS CARDS2 : Cards .
+  var N : Nat .     var NZN : NzNat .
+  vars T P D : Oid .
+
+  --- Assume only ONE player and the dealer:
+
+  --- Start game, by giving the player his first card:
+  rl [startGame] :
+     < T : Table | shoe : CARDS, rndIndex : N >
+     < P : Player | hand : nil, bet : NZN >
+   =>
+     < T : Table | shoe : remove(getRandomCard(CARDS, N), CARDS), rndIndex : s N >
+     < P : Player | hand : getRandomCard(CARDS, N) > .
+
+  rl [dealerFirstCard] :
+     < T : Table | shoe : CARDS, rndIndex : N >
+     < D : Dealer | hand : nil >
+     < P : Player | hand : CARD >
+   =>
+     < T : Table | shoe : remove(getRandomCard(CARDS, N), CARDS), rndIndex : s N >
+     < D : Dealer | hand : getRandomCard(CARDS, N) >
+     < P : Player | > .
+
+  --- Player gets his second card and starts the real game:
+    rl [playerSecond] :
+     < T : Table | shoe : CARDS, rndIndex : N >
+     < P : Player | hand : CARD >
+     < D : Dealer | hand : CARD2 >
+   =>
+     < T : Table | shoe : remove(getRandomCard(CARDS, N), CARDS), rndIndex : s N, turn : P >
+     < P : Player | hand : CARD :: getRandomCard(CARDS, N) >
+     < D : Dealer | > .
+
+   *** Note that since the dealer's second card is invisible, we assume that it is
+   *** given after the player has gotten his cards, even though it does not work like this in
+   *** the casino. 
+
+   --- Player now picks his 3rd, 4th, 5th, etc card:
+   *** Very simple strategy: stop when leastValue >= 15 or bestValue <= 18:
+   crl [playerHit] :
+       < T : Table | shoe : CARDS, rndIndex : N, turn : P >
+       < P : Player | hand : CARDS2 >
+     =>
+       < T : Table | shoe : remove(getRandomCard(CARDS, N), CARDS), rndIndex : s N >
+       < P : Player | hand : CARDS2 :: getRandomCard(CARDS, N) >
+      if not (leastValue(CARDS2) >= 15 or bestValue(CARDS2) >= 18) . 
+
+   crl [playerStand] :
+       < T : Table | turn : P >
+       < P : Player | hand : CARDS2 >
+       < D : Dealer | >
+     =>
+       < T : Table | turn : D >
+       < P : Player | >
+       < D : Dealer | >
+      if leastValue(CARDS2) >= 15 or bestValue(CARDS2) >= 18 .
+
+  --- Now, it's up to the dealer.  We  first model the version
+  --- "dealer stands on all 17".  That is, dealer does NOT hit on "soft 17":
+  crl [dealerTakesMore] :
+      < T : Table | turn : D, shoe : CARDS, rndIndex : N >
+      < D : Dealer | hand : CARD :: CARDS2 >
+    =>
+      < T : Table | shoe : remove(getRandomCard(CARDS, N), CARDS), rndIndex : s N >
+      < D : Dealer | hand : CARD :: CARDS2 :: getRandomCard(CARDS, N) >
+    if bestValue(CARD :: CARDS2) < 17 .
+  
+
+  ops ceasarsPalace peter t : -> Oid [ctor] .
+
+endom)
+
+(rew < t : Table | shoe : deck, rndIndex : 7, turn : t >
+     < ceasarsPalace : Dealer | hand : nil >
+     < peter : Player | hand : nil, bet : 100 > .)
+
+
+*** Now, a guy plays MANY games; how much money does he have afterwards?  
+(omod PLAY-MANY-ROUNDS is
+  protecting PLAY-BJ .
+
+  class RepeatedPlayer | gamesLeft : Nat, money : Nat, eachBet : NzNat .
+  subclass RepeatedPlayer < Player .
+
+  vars T D P : Oid .
+  var NZN : NzNat .
+  vars CARDS1 CARDS2 : Cards .
+  vars N N2 : Nat .
+
+  crl [reSet] :
+     < T : Table | rndIndex : N, turn : D >
+     < D : Dealer | hand : CARDS1 >
+     < P : RepeatedPlayer | hand : CARDS2, bet : NZN, money : N2 >
+   =>
+     < T : Table | shoe : deck, rndIndex : s N, turn : T >
+     < D : Dealer | hand : nil >
+     < P : RepeatedPlayer | hand : nil, bet : 0,
+                            money : N2 + result(CARDS2, CARDS1, NZN) >
+  if bestValue(CARDS1) >= 17 .
+
+  crl [reStart] :
+      < P : RepeatedPlayer | gamesLeft : s N, bet : 0, money : N2, eachBet : NZN >
+    => < P : RepeatedPlayer | gamesLeft : N, bet : NZN, money : sd(N2, NZN) >
+      if NZN <= N2 .
+
+
+endom)
+(rew < t : Table | shoe : deck, rndIndex : 1, turn : t >
+     < ceasarsPalace : Dealer | hand : nil >
+     < peter : RepeatedPlayer | hand : nil, bet : 0, gamesLeft : 100, money : 1000, eachBet : 100 > .)
+
+
+eof
+
+
+
+
+--- Oppgave 1-f.  Simulering av ett spill. Merk at det var strengt tatt ikke
+---   var et eksplisitt krav at kortene skulle deles ut i casino-rekkefolge,
+---   men her er det simulert slik at spilleren foerst faar ett kort,
+---   og saa faar banken ett kort, og saa tar spilleren sine gjenstaaende
+---   kort, med gitt strategi: stoppe paa 15, eller naar en soft hand
+---   har verdi 18 eller bedre.
+---   Banken MAA foelge strategien "dealer stands on all 17s". 
+
+--- Merk ogsaa at hvert spill skal starte med EEN hel kortstokk,
+---   i stedet for de mange kortstokkene vi ofte ser i Las Vegas.
+--- Merk til sist at jeg IKKE forandrer seed'en etter at et kort
+---   er trukket. Dette fordi jeg regner med at getRandomCard
+---   gir rimelig "ulike" kort med samme seed med ulik kortstokk.
+---   Det er ikke utenkelig at det ville vaert enda bedre og enda
+---   mer tilfeldig dersom vi, som indikert i kommentarer nedenfor,
+---   hadde oppdatert seed'en etter hvert trekk av et kort ... 
+--- Merk enda mer til sist at vi antok at vi ikke trenger aa sjekke
+---   om kortstokken hvor kortene trekkes fra blir tom. Det blir
+---   den ikke med kun to spillere!
+--- Husk ogsaa aa fjerne kort som blir utdelt fra den gjenvaerende
+---   kortstokken!
+
+fmod SPILL is  
+  protecting RESULT .
+  protecting RANDOM-CARD .
+  protecting CARDSTOKK .
+  op spillSoft : Nat Nat -> Nat .
+  --- usage: spillSoft(innsats, seedForRandom)
+
+  --- hjelpefunksjon som gjoer all jobben:
+  op spillSoft : Cards Cards Cards Nat Nat ~> Nat .
+  --- usage: spillSoft(spillerensCard, bankensCard, gjenst?endeCardStokk,
+  ---                  innsats, seedForRandom)
+
+  --- plays soft: spilleren stopper n?r leastValue <= 15
+  ---                                   eller bestValue >= 18
+
+  --- dealer: "stands on all 17s"
+  
+  --- note: since player does not take dealer's cards
+  --- into account, the order in which the cards are
+  --- dealt to resp dealer and player is not important!
+
+  --- however, to easily being able to extend the thing to that
+  --- more realistic setting, we actually do the slightly
+  --- more cumbersome work of actually following the appropriate
+  --- order! Of course not needed for the exam!! 
+
+  vars PLAYER DEALER STOKK : Cards .
+  vars BET RNDINDEX : Nat .
+
+  --- call workhorse function:
+  eq spillSoft(BET, RNDINDEX) = 
+        spillSoft(nil, nil, deck, BET, RNDINDEX) .
+
+                 
+         
+  --- notice that cards are dealt in order!
+  --- assume that we never run out of cards!
+
+  eq spillSoft(PLAYER, DEALER, STOKK, BET, RNDINDEX) =
+       --- player gets HER first card:
+       if PLAYER == nil 
+       then 
+         spillSoft(getRandomCard(STOKK, RNDINDEX),
+                   DEALER,
+                   remove(getRandomCard(STOKK, RNDINDEX), STOKK),
+                   BET,
+                   s RNDINDEX)   --- or 'RNDINDEX'
+       else 
+         (if DEALER == nil      --- spiller HAR kort, n? er det bankens tur
+                               --- ? f? sitt f?rste kort!
+          then          
+            spillSoft(PLAYER,
+                      getRandomCard(STOKK, RNDINDEX),
+                      remove(getRandomCard(STOKK, RNDINDEX), STOKK),
+                      BET,
+                      s RNDINDEX)   --- or 'RNDINDEX'
+          else  --- both have at least one card!
+            (if not (leastValue(PLAYER) >= 15 or   --- '14' is better!
+                     bestValue(PLAYER) >= 18)
+                --- PLAYER F?R NYTT CARD
+             then            
+               spillSoft(PLAYER :: getRandomCard(STOKK, RNDINDEX),
+                         DEALER,
+                         remove(getRandomCard(STOKK, RNDINDEX), STOKK),
+                         BET,
+                         s RNDINDEX)   --- or 'RNDINDEX'
+             else   --- spiller ferdig!
+               (if bestValue(DEALER) < 17  --- dealer stands on all 17s
+---                "dealer hits soft 17": 
+---                or (bestValue(DEALER) == 17 and leastValue(DEALER) == 7)
+                then 
+                  spillSoft(PLAYER,
+                            DEALER :: getRandomCard(STOKK, RNDINDEX),
+                            remove(getRandomCard(STOKK, RNDINDEX), STOKK),
+                            BET,
+                            s RNDINDEX)   --- or 'RNDINDEX'
+                else --- bank ferdig, f? RESULT!
+                  result(PLAYER, DEALER, BET)
+                fi)
+             fi)  
+          fi)
+       fi .
+endfm
+
+--- -------------------
+
+--- Testing for egen del! Ikke del av oppgaven.
+
+fmod TEST-SPILL is
+  protecting CARDSTOKK .
+  protecting SPILL .
+endfm
+
+red spillSoft(100, 1) .  --- win!
+red spillSoft(100, 11) . --- blackjack!!
+red spillSoft(100, 21) . --- loss 
+
+--- Oppgave 1-g. Denne er forhaapentligvis grei!
+---   Husk at seed'en maa oppdateres for hvert nye spill! Og at 
+---   hvert nye spill starter med en hel kortstokk.
+
+fmod SPILL-MYE-SOFT is
+  protecting CARDSTOKK .
+  protecting SPILL .
+
+  --- har gitt en grense p? totalt antall penger OG
+  --- max antall runder, og innsats per runde!
+
+  op mangeSofteSpill : Nat Nat Nat Nat -> Nat .
+  --- usage: mangeSofteSpill(MaxAntallRunder, lommebokSt?rrelse,
+  ---                        insatsPerSpill, seed)
+
+  vars RUNDERIGJEN CASH BET RNDINDEX : Nat .
+
+  eq mangeSofteSpill(RUNDERIGJEN, CASH, BET, RNDINDEX) =
+       if CASH >= BET          --- r?d til ? spille en runde videre
+          and
+          RUNDERIGJEN > 0          --- fler spill ...
+       then                 --- spill!
+         mangeSofteSpill(sd(RUNDERIGJEN, 1), 
+                         sd(CASH, BET) + 
+                         spillSoft(BET, RNDINDEX),
+                         BET, RNDINDEX + 5)
+       else CASH
+       fi .
+endfm
+
+--- -------------------
+--- Testing, for egen del. Ikke del av oppgaven!
+--- Merk at man faktisk tjener penger i to av tre sesjoner,
+--- men at totalresultet hvis man spiller alle spill blir et nettotap
+--- paa 350$
+
+red mangeSofteSpill(30, 1000, 100, 1) .    --- 700
+red mangeSofteSpill(10, 1000, 100, 2) .    --- 1150 !!
+red mangeSofteSpill(40, 1000, 100, 2) .    --- 550 !!
+
+
+--- Slutt. Det ville vaere morsomt aa sjekke denne strategien
+---   mot andre strategier, og aa sammenligne bankens startegi
+---   med den aletrnative "dealer must hit soft 17", som visstnok
+---   skal gi casinoet noe BEDRE odds.
+
+--- Kan man spille 100 spill for 1000$??
+
+red mangeSofteSpill(100, 1000,  100, 1) .    --- 0
+
+--- nei, men man staar kun igjen med 400 ... hva med 1000 spill?
+
+red mangeSofteSpill(1000, 1000,  100, 7) . 
+
+--- man st?r faktisk igjen med 50!!

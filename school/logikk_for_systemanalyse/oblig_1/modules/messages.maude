@@ -1,0 +1,62 @@
+--- Different preliminaries for communication.
+
+--- First, we define mesage wrappers:
+
+(omod MESSAGE-WRAPPER is
+  sort MsgContent .     --- message content, application-specific
+  op msg_from_to_ : MsgContent Oid Oid -> Msg [ctor] .
+endom)
+
+
+--- Model unreliability; first the possibility of message loss,
+--- then the possibility of message duplication, and finally
+--- both lossy and duplicating:
+
+(omod MESSAGE-LOSS is including MESSAGE-WRAPPER .
+  var MC : MsgContent .
+  vars O O' : Oid .
+
+  --- Loss of a message of the given kind:
+  rl [messageLoss] :
+     msg MC from O to O'  =>  none .
+endom)
+
+
+(omod MESSAGE-DUPLICATION is including MESSAGE-WRAPPER .
+  var MC : MsgContent .
+  vars O O' : Oid .
+
+  --- Duplication of swimming messages:
+  rl [duplicateMsg] :
+     msg MC from O to O'  =>  (msg MC from O to O')  (msg MC from O to O') .
+endom) 
+
+
+(omod MESSAGE-LOSS-DUPLICATION is 
+  including MESSAGE-LOSS .
+  including MESSAGE-DUPLICATION .
+endom) 
+
+
+--- An alternative model of unreliability: a "shark" object destroys
+--- and duplicates messages:
+
+(omod SHARK is 
+  class Destroyer .
+
+  var O : Oid .
+  var M : Msg .
+
+  rl [messageLoss] :
+     < O : Destroyer | >  M   =>   < O : Destroyer | > .
+
+  rl [duplicateMsg] :
+     < O : Destroyer | >  M   =>   < O : Destroyer | >  M  M .
+endom)
+
+
+--- Yet another model: a "limited" destroyer which can cause
+---  only limited damage, that is, it can perform at most
+---  "maxDamage" number of actions:
+
+*** EXERCISE!

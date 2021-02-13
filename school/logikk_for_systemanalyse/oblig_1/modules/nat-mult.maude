@@ -1,0 +1,37 @@
+fmod NAT-ADD is
+  sort Nat .
+  op 0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op _+_ : Nat Nat -> Nat .
+  
+  vars M N : Nat .
+
+  eq 0 + M = M .
+  eq s(M) + N = s(M + N) .
+endfm
+
+
+fmod NAT-MULT is including NAT-ADD .
+  op _*_ : Nat Nat -> Nat .
+  vars M N : Nat .
+  eq 0 * N = 0 .
+  eq s(M) * N = N + (M * N) .
+endfm
+
+
+red s(s(s(0))) * s(s(s(s(s(0))))) .
+
+
+fmod NAT-EXP is including NAT-MULT .
+  op square : Nat -> Nat .
+  op _**_ : Nat Nat -> Nat .
+  vars M N : Nat .
+  eq square(N) = N * N .
+  eq M ** 0 = s(0) .
+  eq M ** s(N) = M * (M ** N) .
+endfm
+
+red square(0) .
+red square(s(s(s(0)))) . 
+red s(s(0)) ** s(s(s(0))) .
+

@@ -1,0 +1,86 @@
+fmod STRING-LIST is
+  protecting STRING .
+  sort StringList .
+  subsort String < StringList .
+  op nil : -> StringList [ctor] .
+  op __ : StringList StringList -> StringList [ctor assoc id: nil] .
+endfm
+
+
+
+mod OO-POPULATION is
+  protecting STRING-LIST .
+  protecting NAT .
+
+  *** Objects, messages, object names, and configurations:
+  sorts Oid Object Msg Configuration .
+  subsorts Object Msg < Configuration .
+  op none : -> Configuration [ctor] .
+  op __ : Configuration Configuration -> Configuration 
+                                      [ctor assoc comm id: none] . 
+
+  subsort String < Oid .          *** Object names are Strings
+
+  *** Classes:
+  op <_: Names | OKnames:_> : Oid StringList -> Object [ctor] .
+  op <_: Person | age:_, status:_> : Oid Nat Status -> Object 
+                                                       [ctor] .
+
+  *** Separate messages:
+  op separate : Oid -> Msg [ctor] .
+
+  sort Status .
+  op single : -> Status [ctor] .
+  ops engaged married separated : Oid -> Status [ctor] .
+
+  vars X X' X'' X''' : String .    vars N N' : Nat .  
+  var S : Status .                 vars L L' : StringList .
+
+  crl [birthday] : 
+      < X : Person | age: N, status: S >  
+    =>
+      < X : Person | age: N + 1, status: S >  if N < 999 .
+
+  crl [engagement] : 
+      < X : Person | age: N, status: single >
+      < X' : Person | age: N', status: single >  
+    =>
+      < X : Person | age: N, status: engaged(X') >
+      < X' : Person | age: N', status: engaged(X) >
+    if N > 15 /\ N' > 15 .
+
+  *** rl [death] : < X : Person | age: N, status: S >  =>  none .
+
+  crl [birth] : 
+      < X : Person | age: N, status: married(X') >
+      < X'' : Names | OKnames: L X''' L' >
+    =>
+      < X : Person | age: N, status: married(X') >
+      < X'' : Names | OKnames: L X''' L' >
+      < X''' : Person | age: 0, status: single >  if N < 60 .
+
+  rl [separationInit] :  
+     < X : Person | age: N, status: married(X') >  
+   =>
+     < X : Person | age: N, status: separated(X') >
+     separate(X') .
+
+  rl [acceptSeparation] :  
+     separate(X) 
+     < X : Person | age: N, status: married(X') >  
+   =>
+     < X : Person | age: N, status: separated(X') > .
+
+  *** Some rules are exercises and are therefore omitted
+
+  op greeks : -> Configuration .
+  eq greeks =   
+    < "PossibleNames" : Names | OKnames: "Hera" "Zeus" "Hades" >
+    < "Gaia" : Person | age: 999, status: married("Uranus") >
+    < "Uranus" : Person | age: 900, status: married("Gaia") >
+    < "Kronos" : Person | age: 800, status: married("Rhea") >
+    < "Rhea" : Person | age: 21, status: married("Kronos") > .
+endm
+
+frew [10] greeks .
+

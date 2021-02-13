@@ -1,0 +1,63 @@
+load full-maude26
+
+(omod POPULATION is
+  protecting NAT + STRING .
+  sort Status .
+  op single : -> Status [ctor] .
+  ops engaged married separated : Oid -> Status [ctor] .
+  subsort String < Oid .
+  class Person | age : Nat, status : Status .
+  vars N N' : Nat .   vars X X' : String .
+
+  crl [birthday] :  < X : Person | age : N >  =>
+                    < X : Person | age : N + 1 >  if N < 999 .
+
+  crl [engagement] :  < X : Person | age : N, status : single >
+                      < X' : Person | age : N', status : single >
+                         =>
+                      < X : Person | status : engaged(X') >
+                      < X' : Person | status : engaged(X) >
+                         if N > 15 and N' > 15 .
+
+  rl [death1] : < X : Person | status : single > => none .
+
+  rl [death2] :
+     < X : Person | status : engaged(X') >
+     < X' : Person | >
+    =>
+     < X' : Person | status : single > .
+
+  rl [death3] :
+     < X : Person | status : married(X') >
+     < X' : Person | >
+    =>
+     < X' : Person | status : single > .
+
+  rl [death3] :
+     < X : Person | status : separated(X') >
+     < X' : Person | >
+    =>
+     < X' : Person | status : single > .
+
+  *** separation: see later
+
+  rl [divorce] : < X : Person | status : separated(X') >  < X' : Person | >
+                 =>  < X : Person | status : single >  < X' : Person | status : single > .
+
+
+  ops initState greeks : -> Configuration .  *** Initial states
+  eq initState =
+         < "Peter" : Person | age : 35, status : single >
+         < "Lizzie" : Person | age : 32, status : single >
+         < "Sam the Snake" : Person | age : 37, status : single > .
+
+  eq greeks =
+      < "Gaia" : Person | age : 999, status : married("Uranus") >
+      < "Uranus" : Person | age : 900, status : married("Gaia") > .
+endom)
+
+(frew [3] initState .)
+
+(frew [10] greeks .)
+
+(search [1] initState =>* (none).Configuration .)

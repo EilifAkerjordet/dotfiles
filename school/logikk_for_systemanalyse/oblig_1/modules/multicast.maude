@@ -1,0 +1,22 @@
+(omod OID-SET is
+  sort OidSet .
+  subsort Oid < OidSet .
+  op none : -> OidSet [ctor] .
+  op _;_ : OidSet OidSet -> OidSet [ctor assoc comm id: none] .
+endom)
+
+
+(omod MULTICAST is
+  including OID-SET + MESSAGE-WRAPPER .
+
+  op multicast_from_to_ : MsgContent Oid OidSet -> Msg [ctor] .
+
+  var M : MsgContent .   vars SENDER ARECEIVER : Oid .
+  var OTHER-RECEIVERS : OidSet .
+
+  eq multicast M from SENDER to none = none .
+  eq multicast M from SENDER to ARECEIVER ; OTHER-RECEIVERS =
+        (msg M from SENDER to ARECEIVER)
+        (multicast M from SENDER to OTHER-RECEIVERS) .
+endom)
+

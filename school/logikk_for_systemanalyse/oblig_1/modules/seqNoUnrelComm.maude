@@ -1,0 +1,193 @@
+--- For lectures. A simple protocol which uses sequence numbers and
+---  acknowledgments to achieve reliable and ordered communication
+---  through an unreliable (i.e., lossy and duplicating) and
+---  unordered transmission medium.
+
+--- The protocol does not terminate.
+
+load full-maude26
+
+load messages.maude    --- Message wrappers and models of unreliable communication
+
+--- First the message types:
+(omod MESSAGES is including MESSAGE-WRAPPER .
+  protecting STRING .
+  protecting NAT .
+
+  sort Content .   --- content of messages without sequence numbers
+
+  subsort String < Content .   --- our "main" messages are just strings!
+  op ack : -> Content [ctor] . --- acknowledgment message  
+
+  --- sequence number wrapper:
+  op _withSeqNo_ : Content Nat -> MsgContent [ctor] .
+endom)
+
+
+--- A module for LISTS of Strings:
+(fmod STRING-LIST is protecting STRING .
+  sort StringList .
+  subsort String < StringList .
+  op nil : -> StringList [ctor] .
+  op _++_ : StringList StringList -> StringList [ctor assoc id: nil] .
+endfm)
+
+
+--- Here comes the actual protocol:
+(omod SEQNO-UNORDERED is 
+  including STRING-LIST .
+  including MESSAGES .
+  including MESSAGE-LOSS .
+
+  --- Sender protocol:
+  class Sender | msgsToSend : StringList,   --- messages not sent yet
+                 currentMsg : StringList,   --- current string, or nil
+                 currentSeqNo : Nat,        --- seq no to current msg 
+                 receiver : Oid .           --- receiver address        
+
+
+  vars N N' : Nat .
+  var NZ : NzNat .
+  vars O O' : Oid .
+  var S : String .
+  var SL : StringList .
+
+  rl [start] :
+     < O : Sender | msgsToSend : S ++ SL, currentMsg : nil >
+    =>
+     < O : Sender | msgsToSend : SL, currentMsg : S, currentSeqNo : 1 > .
+
+  rl [sendCurrentMsg] :      
+     < O : Sender | currentMsg : S, currentSeqNo : N, receiver : O' >  
+    =>
+     < O : Sender | >
+     msg (S withSeqNo N) from O to O' .
+
+  rl [receiveCurrentAckNotLast] :
+     (msg (ack withSeqNo N) from O' to O)
+     < O : Sender | currentSeqNo : N, msgsToSend : S ++ SL >
+    =>
+     < O : Sender | currentSeqNo : N + 1, currentMsg : S,
+                    msgsToSend : SL > .
+
+  rl [receiveAckLast] :
+     (msg (ack withSeqNo N) from O' to O)
+     < O : Sender | currentSeqNo : N, msgsToSend : nil >
+    =>
+     < O : Sender | currentSeqNo : N + 1, currentMsg : nil > .
+
+  crl [rcvTooOldAck] :
+      (msg (ack withSeqNo N) from O' to O)
+      < O : Sender | currentSeqNo : N' > 
+     =>
+      < O : Sender | > 
+     if N < N' .
+
+  
+  --- Receiver protocol:
+ 
+  class Receiver | greatestSeqNoRcvd : Nat, 
+                   sender : Oid, 
+                   msgsRcvd : StringList .
+  --- Note: the latter attribute is NOT a part of the protocol,
+  ---       just added for analysis purposes.
+
+  --- send ack's, only when seqNo > 0:
+  rl [sendAck] :
+     < O : Receiver | greatestSeqNoRcvd : NZ, sender : O' >
+    =>
+     < O : Receiver | >
+     msg (ack withSeqNo NZ) from O to O' .
+   
+  --- receive NEXT new packet:
+  rl [rcvNewPacket] :
+     (msg (S withSeqNo s N) from O' to O)
+     < O : Receiver | greatestSeqNoRcvd : N, msgsRcvd : SL >
+    =>
+     < O : Receiver | greatestSeqNoRcvd : s N, msgsRcvd : SL ++ S > .
+
+  --- receive/ignore  a packet with an *old* sequence number:
+  crl [rcvOldPacket] :
+      (msg (S withSeqNo N) from O' to O)
+      < O : Receiver | greatestSeqNoRcvd : N' >
+     =>
+      < O : Receiver | >
+     if N <= s N' .
+endom)
+
+--- Define some suitable initial states:
+(omod TEST-SEQNO-UNORDERED is including SEQNO-UNORDERED .
+  subsort String < Oid .
+
+  op init : -> Configuration .   --- a suitable initial state
+
+  eq init =
+       < "Sender" : Sender | msgsToSend : "Sequence" ++ "numbers" ++ 
+                                          "are" ++ "great" ++ "fun",
+                             currentMsg : nil,
+                             currentSeqNo : 0,
+                             receiver : "Receiver" >
+       < "Receiver" : Receiver | greatestSeqNoRcvd : 0, msgsRcvd : nil,
+                                 sender : "Sender" > .
+endom)
+
+(frew [200] init .)
+--- nice result
+
+eof
+
+
+--- search for a bad state, where messages are stored
+--- in the wrong order:
+---(
+(search [1,20] 
+   init =>+ 
+            C:Configuration 
+            < "Receiver" : Receiver | msgsRcvd : SL:StringList ++ "great"
+                                                 ++ SL':StringList ++
+                                                 "are" ++ SL'':StringList > .)
+)---
+
+--- Just to check: also search for a state where these are received in the right order.
+--- Mostly to check how the search lasts ...
+(search [1] 
+   init =>+ 
+            C:Configuration 
+            < "Receiver" : Receiver | msgsRcvd : SL:StringList ++ "are"
+                                                 ++ SL':StringList ++
+                                                 "great" ++ SL'':StringList > .)
+)---
+--- This search command replied immediately with a desired state. 
+
+
+
+--- search for a bad state in which "are" has never been received:
+---(
+(search [1] 
+   init =>+ 
+            C:Configuration 
+            < "Receiver" : Receiver | msgsRcvd : "numbers" ++ "great"
+                                                 ++ SL':StringList > .)
+)---
+
+--- search for a state in which highest received seqNo is 4, and the recieved
+--- mesages are different from "INF3230" ++ "er" ++ "meget" ++ "moro":
+---(
+(search [1] 
+   init =>+ 
+            C:Configuration 
+            < "Receiver" : Receiver | msgsRcvd : SL:StringList,
+                                      greatestSeqNoRcvd : 5 > 
+   such that SL:StringList =/= "Sequence" ++ "numbers" ++ "are" ++ "great" ++ "fun" .)
+)---
+
+
+--- Reality check: how long does it take to find a bad state (note small 's' in 'Sequence'):
+---(
+(search [1] 
+   init =>+ 
+            C:Configuration 
+            < "Receiver" : Receiver | msgsRcvd : SL:StringList,
+                                      greatestSeqNoRcvd : 5 > 
+   such that SL:StringList =/= "sequence" ++ "numbers" ++ "are" ++ "great" ++ "fun" .)
+)---

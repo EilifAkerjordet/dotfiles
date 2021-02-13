@@ -1,0 +1,138 @@
+--- Alternating bit protocol.  October 2014.
+
+--- The protocol does not terminate.
+
+load full-maude26
+
+--- First, various link models:
+
+(omod MSG-CONTENT-LIST is
+  sorts MsgContent MsgContentList .
+  subsort MsgContent < MsgContentList .
+  op nil : -> MsgContentList [ctor] .
+  op _::_ : MsgContentList MsgContentList -> MsgContentList [ctor assoc id: nil] .
+endom)
+
+(omod LINK is
+  protecting MSG-CONTENT-LIST .
+  
+  class Link | content : MsgContentList .
+
+  op _to_ : Oid Oid -> Oid [ctor] .
+endom)
+
+(omod LOSSY-LINK is
+  protecting LINK .
+  
+  class LossyLink .
+  subclass LossyLink < Link .
+
+  vars MCL MCL' : MsgContentList .
+  var M : MsgContent .
+  vars SOURCE DEST : Oid .
+
+  rl [lose-msg] :
+     < SOURCE to DEST : LossyLink | content : MCL :: M :: MCL' >   =>
+     < SOURCE to DEST : LossyLink | content : MCL :: MCL' > .
+endom)
+
+(omod DUPLICATING-LINK is    --- not to be used for ABP!
+  protecting LINK .
+
+  class DuplLink .
+  subclass DuplLink < Link .
+ 
+  vars MCL MCL' : MsgContentList .
+  var M : MsgContent .
+  vars SOURCE DEST : Oid .
+ 
+  rl [duplMsg] :
+     < SOURCE to DEST : DuplLink | content : MCL :: M :: MCL' >   =>
+     < SOURCE to DEST : DuplLink | content : MCL :: M :: MCL' :: M > .
+endom)
+
+(omod UNREL-LINK is
+  protecting LOSSY-LINK .
+  protecting DUPLICATING-LINK .
+
+  class UnrelLink .
+  subclass UnrelLink < LossyLink DuplLink .
+endom)
+
+
+--- Datatype for bits
+(fmod BIT is
+  sort Bit .
+  ops 0 1 : -> Bit [ctor] .
+  op not : Bit -> Bit .
+  eq not(0) = 1 .
+  eq not(1) = 0 .
+endfm)
+
+
+
+--- Then the message types:
+
+(omod MESSAGES is        --- same as for TCP-unordered, except with bits
+  protecting STRING .
+  protecting BIT .
+  sort Content .
+  subsort String < Content .   --- our "main" messages are just strings!
+  op ack : -> Content [ctor] . --- acknowledgment message  
+
+  --- sequence number wrapper:
+  msg _withBit_ : Content Bit -> MsgContent .
+endom)
+
+
+--- A module for LISTS of Strings:
+(fmod STRING-LIST is protecting STRING .
+  sort StringList .
+  subsort String < StringList .
+  op nil : -> StringList [ctor] .
+  op _++_ : StringList StringList -> StringList [ctor assoc id: nil] .
+endfm)
+
+
+--- Here comes the actual protocol:
+(omod ALTERNATING-BIT is 
+  including STRING-LIST .
+  including MESSAGES .
+  including UNREL-LINK .
+
+  --- Sender protocol:
+  class Sender | msgsToSend : StringList,   --- messages not sent yet
+                 currentMsg : StringList,   --- current string, or nil
+                 currentBit : Bit,          --- bit to current msg 
+                 receiver : Oid .           --- receiver address        
+
+
+  vars B B' : Bit .
+  vars O O' : Oid .
+  var S : String .
+  var SL : StringList .
+  var MCL : MsgContentList .
+
+  rl [start] :
+     < O : Sender | msgsToSend : S ++ SL, currentMsg : nil, currentBit : 0 >
+    =>
+     < O : Sender | msgsToSend : SL, currentMsg : S, currentBit : 1 > .
+
+  rl [sendCurrentMsg] :      
+     < O : Sender | currentMsg : S, currentBit : B, receiver : O' >  
+     < O to O' : Link | content : MCL >
+    =>
+     < O : Sender | >
+     < O to O' : Link | content : MCL :: (S withBit B) > .
+
+  rl [receiveCurrentAckNotLast] :
+     < O : Sender | currentBit : B, msgsToSend : S ++ SL >
+     < O' to O : Link | content : (ack withBit B) :: MCL >
+    =>
+     < O : Sender | currentBit : not(B), currentMsg : S,
+                    msgsToSend : SL > 
+     < O' to O : Link | content : MCL > .
+
+  *** REST IS LEFT IS AN EXERCISE   
+
+endom)

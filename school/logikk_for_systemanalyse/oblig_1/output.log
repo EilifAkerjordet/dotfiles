@@ -1,0 +1,216 @@
+Script started on 2021-02-05 21:18:52+01:00 [TERM="tmux-256color" TTY="/dev/pts/5" COLUMNS="94" LINES="56"]
+kmaude\		     \||||||||||||||||||/
+		   --- Welcome to [31mM[36ma[34mu[35md[32me[0m ---
+		     /||||||||||||||||||\
+	     Maude 3.1 built: Oct 29 2020 09:40:37
+	     Copyright 1997-2020 SRI International
+		   Fri Feb  5 21:18:57 2021
+Maude> in oblig1a[K.test.maude
+Reading in file: "oblig1.maude"
+==========================================
+reduce in NAT-MULT : s(s(s(0))) * s(s(s(s(s(0))))) .
+rewrites: 22 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: s(s(s(s(s(s(s(s(s(s(s(s(s(s(s(0)))))))))))))))
+==========================================
+reduce in NAT-EXP : square(0) .
+rewrites: 2 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: 0
+==========================================
+reduce in NAT-EXP : square(s(s(s(0)))) .
+rewrites: 17 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: s(s(s(s(s(s(s(s(s(0)))))))))
+==========================================
+reduce in NAT-EXP : s(s(0)) ** s(s(s(0))) .
+rewrites: 33 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: s(s(s(s(s(s(s(s(0))))))))
+[32mAdvisory: [0mredefining module [35mNAT-ADD[0m.
+==========================================
+fmod NAT1
+[32mAdvisory: [0mredefining module [35mBOOLEAN[0m.
+==========================================
+fmod BOOLEAN1
+[31mWarning: [0m"list-nat1-public.maude", line 2: unable to locate file: [35mnat1.maude[0m
+[31mWarning: [0m"list-nat1-public.maude", line 3: unable to locate file: [35mboolean1.maude[0m
+[32mAdvisory: [0mreparsing module [35mNAT1[0m due to changes in imported modules.
+[32mAdvisory: [0mreparsing module [35mNAT<[0m due to changes in imported modules.
+==========================================
+fmod EX10
+[31mWarning: [0m"bintree-public.maude", line 2: unable to locate file: [35mlist-nat1.maude[0m
+==========================================
+fmod EX13
+Done reading in file: "oblig1.maude"
+==========================================
+reduce in NAT1 : s(s(s(s(s(0))))) monus s(s(0)) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: s(s(s(s(s(0))))) monus s(s(0))
+==========================================
+reduce in NAT1 : s(s(0)) monus s(s(s(0))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: s(s(0)) monus s(s(s(0)))
+==========================================
+reduce in NAT1 : s(0) monus s(0) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: s(0) monus s(0)
+==========================================
+reduce in NAT1 : min(s(0), s(0)) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: min(s(0), s(0))
+==========================================
+reduce in NAT1 : min(0, s(s(s(0)))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: min(0, s(s(s(0))))
+==========================================
+reduce in NAT1 : min(s(s(s(s(0)))), s(s(0))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: min(s(s(s(s(0)))), s(s(0)))
+==========================================
+reduce in NAT1 : odd(0) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Boolean: odd(0)
+==========================================
+reduce in NAT1 : even(0) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Boolean: even(0)
+==========================================
+reduce in NAT1 : odd(s(s(s(s(0))))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Boolean: odd(s(s(s(s(0)))))
+==========================================
+reduce in NAT1 : even(s(s(s(s(0))))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Boolean: even(s(s(s(s(0)))))
+==========================================
+reduce in NAT1 : odd(s(s(s(s(s(0)))))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Boolean: odd(s(s(s(s(s(0))))))
+==========================================
+reduce in NAT1 : even(s(s(s(s(s(0)))))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Boolean: even(s(s(s(s(s(0))))))
+==========================================
+reduce in EX10 : empty?(nil) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Boolean: empty?(nil)
+==========================================
+reduce in EX10 : rest(nil) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: rest(nil)
+==========================================
+reduce in EX10 : last(nil) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: last(nil)
+==========================================
+reduce in EX10 : reverse(nil) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: reverse(nil)
+==========================================
+reduce in EX10 : empty?(nil s(0)) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Boolean: empty?(nil s(0))
+==========================================
+reduce in EX10 : rest(nil s(0)) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: rest(nil s(0))
+==========================================
+reduce in EX10 : last(nil s(0)) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: last(nil s(0))
+==========================================
+reduce in EX10 : reverse(nil s(0)) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: reverse(nil s(0))
+==========================================
+reduce in EX10 : empty?(nil s(s(s(0))) s(0) s(s(0))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Boolean: empty?(nil s(s(s(0))) s(0) s(s(0)))
+==========================================
+reduce in EX10 : rest(nil s(s(s(0))) s(0) s(s(0))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: rest(nil s(s(s(0))) s(0) s(s(0)))
+==========================================
+reduce in EX10 : last(nil s(s(s(0))) s(0) s(s(0))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: last(nil s(s(s(0))) s(0) s(s(0)))
+==========================================
+reduce in EX10 : reverse(nil s(s(s(0))) s(0) s(s(0))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: reverse(nil s(s(s(0))) s(0) s(s(0)))
+==========================================
+reduce in EX13 : inorder(bintree(empty, s(s(s(s(0)))), bintree(empty, s(s(s(s(s(s(s(0))))))),
+    empty))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: inorder(bintree(empty, s(s(s(s(0)))), bintree(empty, s(s(s(s(s(s(s(0))))))),
+    empty)))
+==========================================
+reduce in EX13 : postorder(bintree(empty, s(s(s(s(0)))), bintree(empty, s(s(s(s(s(s(s(
+    0))))))), empty))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: postorder(bintree(empty, s(s(s(s(0)))), bintree(empty, s(s(s(s(s(s(s(0))))))),
+    empty)))
+==========================================
+reduce in EX13 : weight(bintree(empty, s(s(s(s(0)))), bintree(empty, s(s(s(s(s(s(s(0))))))),
+    empty))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: weight(bintree(empty, s(s(s(s(0)))), bintree(empty, s(s(s(s(s(s(s(0))))))),
+    empty)))
+==========================================
+reduce in EX13 : reverse(bintree(empty, s(s(s(s(0)))), bintree(empty, s(s(s(s(s(s(s(0))))))),
+    empty))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result BinTree: reverse(bintree(empty, s(s(s(s(0)))), bintree(empty, s(s(s(s(s(s(s(0))))))),
+    empty)))
+==========================================
+reduce in EX13 : inorder(empty) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: inorder(empty)
+==========================================
+reduce in EX13 : postorder(empty) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: postorder(empty)
+==========================================
+reduce in EX13 : weight(empty) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: weight(empty)
+==========================================
+reduce in EX13 : reverse(empty) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result BinTree: reverse(empty)
+==========================================
+reduce in EX13 : inorder(bintree(bintree(empty, s(s(0)), bintree(empty, s(s(s(0))), empty)),
+    s(s(s(s(0)))), bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty), s(s(s(s(s(s(s(
+    0))))))), bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty)))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: inorder(bintree(bintree(empty, s(s(0)), bintree(empty, s(s(s(0))), empty)), s(s(
+    s(s(0)))), bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty), s(s(s(s(s(s(s(0))))))),
+    bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty))))
+==========================================
+reduce in EX13 : postorder(bintree(bintree(empty, s(s(0)), bintree(empty, s(s(s(0))),
+    empty)), s(s(s(s(0)))), bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty), s(s(s(s(s(s(
+    s(0))))))), bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty)))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result List: postorder(bintree(bintree(empty, s(s(0)), bintree(empty, s(s(s(0))), empty)), s(
+    s(s(s(0)))), bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty), s(s(s(s(s(s(s(0))))))),
+    bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty))))
+==========================================
+reduce in EX13 : weight(bintree(bintree(empty, s(s(0)), bintree(empty, s(s(s(0))), empty)),
+    s(s(s(s(0)))), bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty), s(s(s(s(s(s(s(
+    0))))))), bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty)))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result Nat: weight(bintree(bintree(empty, s(s(0)), bintree(empty, s(s(s(0))), empty)), s(s(s(
+    s(0)))), bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty), s(s(s(s(s(s(s(0))))))),
+    bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty))))
+==========================================
+reduce in EX13 : reverse(bintree(bintree(empty, s(s(0)), bintree(empty, s(s(s(0))), empty)),
+    s(s(s(s(0)))), bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty), s(s(s(s(s(s(s(
+    0))))))), bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty)))) .
+rewrites: 0 in 0ms cpu (0ms real) (~ rewrites/second)
+result BinTree: reverse(bintree(bintree(empty, s(s(0)), bintree(empty, s(s(s(0))), empty)),
+    s(s(s(s(0)))), bintree(bintree(empty, s(s(s(s(s(s(0)))))), empty), s(s(s(s(s(s(s(
+    0))))))), bintree(empty, s(s(s(s(s(s(s(s(s(0))))))))), empty))))
+Maude> quit
+Bye.
+[1m[7m%[27m[1m[0m                                                                                              k..alyse/oblig_1\[0m[27m[24m[J
+[1min [0m[1m[36mschool/logikk_for_systemanalyse/oblig_1[0m[36m[39m[1m [0m[1mtook [0m[1m[33m10s[0m[33m[39m[1m [0m
+[1m[0m[1m[37m[I][0m[37m[39m[1m [0m[1m [0m[1m[33m [0m[33m[39m[1m [0m[K[?1h=[?2004h[?2004l
+
+Script done on 2021-02-05 21:19:09+01:00 [COMMAND_EXIT_CODE="0"]

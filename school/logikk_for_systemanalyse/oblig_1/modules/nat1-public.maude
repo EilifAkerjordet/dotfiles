@@ -1,0 +1,43 @@
+set include BOOL off .
+load nat-mult.maude 
+load less-than.maude
+
+
+
+fmod NAT1 is protecting NAT-MULT . protecting NAT< .
+  ops _monus_ diff max min : Nat Nat -> Nat .
+  ops _<=_ _>=_  _>_  _==_ : Nat Nat -> Boolean .
+  ops odd even : Nat -> Boolean .
+  op half : Nat -> Nat .
+
+  --- Here comes all your stuff 
+endfm
+
+
+--- For testing:
+***(    Commented away
+
+red s(s(0)) monus s(0) .
+red s(0) monus s(s(0)) .
+red diff(s(s(s(s(0)))), s(s(0))) .
+red max(s(s(0)), s(0)) .
+red max(s(s(0)), s(s(s(s(s(0)))))) .
+red min(s(s(0)), s(0)) .
+red min(s(s(0)), s(s(s(s(s(0)))))) .
+
+red odd(0) .   
+red odd(s(0)) .
+red odd(s(s(0))) .
+red odd(s(s(s(0)))) .
+red odd(s(s(s(s(s(0)))))) .
+red even(0) .   
+red even(s(0)) .
+red even(s(s(0))) .
+red even(s(s(s(0)))) .
+red even(s(s(s(s(s(0)))))) .
+
+red half(s(0)) .
+red half(s(s(s(s(s(0)))))) .
+red half(s(s(s(s(s(s(0))))))) .
+
+)***     
