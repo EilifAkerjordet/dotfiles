@@ -41,6 +41,7 @@ alias weather="curl wttr.in/"
 alias glyphs="sh ~/applications/siji/view.sh"
 alias r="ranger"
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+alias k="kubectl"
 
 source $ZSH/oh-my-zsh.sh
 neofetch
@@ -50,3 +51,4 @@ export EDITOR=/usr/bin/nvim
 export TERMINAL=/usr/bin/alacritty
 export BROWSER=/usr/bin/brave
 export VISUAL=/usr/bin/nvim
+[[ /usr/bin/kubectl ]] && source <(kubectl completion zsh)

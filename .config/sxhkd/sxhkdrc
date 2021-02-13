@@ -1,6 +1,8 @@
 # Applications
 super + Return
 	alacritty
+super + w
+	alacritty -e nvim $HOME/vimwiki/index.wiki
 alt + Return
 	bspc rule -a \* -o state=floating && alacritty --config-file $HOME/.config/alacritty/alacritty-floating.yml
 alt + space
@@ -17,10 +19,23 @@ super + d
 	discord
 super + m
 	spotify
+super + n
+	notion-app
+super + e
+	trello
 
 # Dmenu Scripts
 ctrl + alt + e
         ./.dmenu/dmenu-edit-configs.sh
+
+# Screenshot
+ctrl + alt + 2
+	flameshot gui
+
+# Change language
+ctrl + alt + l
+	./scripts/changelang.sh
+
 
 # Media keys
 XF86MonBrightnessUp

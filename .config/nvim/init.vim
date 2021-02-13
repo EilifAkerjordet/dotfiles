@@ -4,9 +4,11 @@ call plug#begin('~/local/share/nvim/plugged')
  Plug 'sheerun/vim-polyglot'
  Plug 'SirVer/ultisnips'
  Plug 'pechorin/any-jump.vim'
+ Plug 'lervag/vimtex'
+ Plug 'Konfekt/FastFold'
+ Plug 'matze/vim-tex-fold'
  Plug 'mattn/emmet-vim'
  Plug 'w0rp/ale'
- Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
  Plug 'hail2u/vim-css3-syntax'
  Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
  Plug 'sbdchd/neoformat'
@@ -18,17 +20,20 @@ call plug#begin('~/local/share/nvim/plugged')
  Plug 'christoomey/vim-tmux-navigator'
  Plug 'benmills/vimux'
  Plug 'mlaursen/vim-react-snippets'
+ Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
  Plug 'tpope/vim-commentary'
  Plug 'norcalli/nvim-colorizer.lua'
  Plug 'jiangmiao/auto-pairs'
+ Plug 'lgeorget/maude.vim'
  Plug 'ThePrimeagen/vim-be-good', { 'do': './install.sh' }
  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+ Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(1) } }
  Plug 'junegunn/fzf.vim'
  Plug 'airblade/vim-rooter'
  Plug 'vimwiki/vimwiki'
  Plug 'tpope/vim-fugitive'
  Plug 'unblevable/quick-scope'
- Plug 'kevinhwang91/rnvimr'
+ Plug 'kevinhwang91/rnvimr', {'branch': 'main'}
  Plug 'miyakogi/seiya.vim'
  Plug 'turbio/bracey.vim'
  Plug 'yuttie/comfortable-motion.vim'
@@ -70,8 +75,15 @@ let g:calendar_google_calendar = 1
 let g:calendar_google_task = 1
 let g:bracey_server_allow_remote_connections = 1
 
+let R_auto_start=1
+
+let R_in_buffer = 0
+let R_source = '/home/eilif/local/share/nvim/plugged/Nvim-R/R/tmux_split.vim'
+
  " KEY MAPS START
 let mapleader = " "
+let maplocalleader = ','
+
 nnoremap <C-s> :w<CR>
 nnoremap <C-w> :wq<CR>
 nnoremap <C-q> :q!<CR>
@@ -252,6 +264,15 @@ augroup END
 
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 """""""""""""""""""QuickScope"""""""""""""""""""""""""""
+"""""""""""""""""""VIMTEX"""""""""""""""""""""""""""
+let g:vimtex_view_method = 'zathura'
+let g:tex_flavor  = 'latex'
+let g:tex_conceal = ''
+let g:vimtex_fold_manual = 1
+let g:vimtex_latexmk_continuous = 1
+let g:vimtex_compiler_progname = 'nvr'
+" use SumatraPDF if you are on Windows
+"""""""""""""""""""VIMTEX"""""""""""""""""""""""""""
 
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
