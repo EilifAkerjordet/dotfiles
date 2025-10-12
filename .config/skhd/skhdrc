@@ -1,0 +1,135 @@
+# ============================================================================
+# Command Definitions (skhd.zig feature)
+# ============================================================================
+
+# Window focus with fallback to display
+.define yabai_focus : yabai -m window --focus {{1}} || yabai -m display --focus {{1}}
+
+# Window actions (swap, warp, etc.)
+.define window_action : yabai -m window --{{1}} {{2}}
+
+# Window warp with display fallback
+.define warp_or_display : yabai -m window --warp {{1}} || yabai -m window --display {{1}}; yabai -m display --focus {{1}}
+
+# Space operations
+.define space_focus : yabai -m space --focus {{1}}
+.define window_to_space : yabai -m window --space {{1}}; yabai -m space --focus {{1}}
+
+# Display operations
+.define window_to_display : yabai -m window --display {{1}}; yabai -m display --focus {{1}}
+
+# Window resize with fallback
+.define resize_window : yabai -m window --resize {{1}}:{{2}}:{{3}} || yabai -m window --resize {{4}}:{{2}}:{{3}}
+
+# Window toggle
+.define toggle_window : yabai -m window --toggle {{1}}
+
+# ============================================================================
+# System Reload
+# ============================================================================
+
+cmd + alt - s : skhd --reload
+cmd + alt - y : yabai --restart-service
+
+# ============================================================================
+# Application Launching
+# ============================================================================
+
+cmd - return : /Applications/Alacritty.app/Contents/MacOS/alacritty
+alt - n : /Applications/Alacritty.app/Contents/MacOS/alacritty -e nvim
+alt - t : /Applications/Alacritty.app/Contents/MacOS/alacritty -e btop
+alt - b : open "/Applications/Zen Browser.app"
+alt - m : open "/Applications/Spotify.app"
+alt - a : open "/Applications/Claude.app"
+
+# ============================================================================
+# Window Focus (Vim-style navigation)
+# ============================================================================
+
+cmd - h : @yabai_focus("west")
+cmd - l : @yabai_focus("east")
+cmd - k : @yabai_focus("north")
+cmd - j : @yabai_focus("south")
+
+# ============================================================================
+# Swap Windows
+# ============================================================================
+
+shift + alt - h : @window_action("swap", "west")
+shift + alt - l : @window_action("swap", "east")
+shift + alt - k : @window_action("swap", "north")
+shift + alt - j : @window_action("swap", "south")
+
+# ============================================================================
+# Warp Windows (with display fallback)
+# ============================================================================
+
+shift + cmd - h : @warp_or_display("west")
+shift + cmd - l : @warp_or_display("east")
+shift + cmd - k : @warp_or_display("north")
+shift + cmd - j : @warp_or_display("south")
+
+# ============================================================================
+# Focus Spaces
+# ============================================================================
+
+cmd - 1 : @space_focus("1")
+cmd - 2 : @space_focus("2")
+cmd - 3 : @space_focus("3")
+cmd - 4 : @space_focus("4")
+cmd - 5 : @space_focus("5")
+cmd - 6 : @space_focus("6")
+cmd - 7 : @space_focus("7")
+cmd - 8 : @space_focus("8")
+cmd - 9 : @space_focus("9")
+
+# ============================================================================
+# Send Window to Space and Follow
+# ============================================================================
+
+shift + cmd - z : yabai -m window --space next; yabai -m space --focus next
+shift + cmd - 1 : @window_to_space("1")
+shift + cmd - 2 : @window_to_space("2")
+shift + cmd - 3 : @window_to_space("3")
+shift + cmd - 4 : @window_to_space("4")
+shift + cmd - 5 : @window_to_space("5")
+shift + cmd - 6 : @window_to_space("6")
+shift + cmd - 7 : @window_to_space("7")
+shift + cmd - 8 : @window_to_space("8")
+shift + cmd - 9 : @window_to_space("9")
+
+# ============================================================================
+# Send Window to Display and Follow
+# ============================================================================
+
+# cmd + shift - l : @window_to_display("east")
+# cmd + shift - h : @window_to_display("west")
+
+# ============================================================================
+# Move Floating Windows
+# ============================================================================
+
+shift + ctrl - w : @window_action("move", "rel:0:-20")
+shift + ctrl - a : @window_action("move", "rel:-20:0")
+shift + ctrl - s : @window_action("move", "rel:0:20")
+shift + ctrl - d : @window_action("move", "rel:20:0")
+
+# ============================================================================
+# Resize Windows
+# ============================================================================
+
+cmd + alt - h : @resize_window("right", "-20", "0", "left")
+cmd + alt - l : @resize_window("right", "20", "0", "left")
+cmd + alt - j : @resize_window("top", "0", "20", "bottom")
+cmd + alt - k : @resize_window("top", "0", "-20", "bottom")
+
+# ============================================================================
+# Window Toggles
+# ============================================================================
+
+alt - d : @toggle_window("zoom-parent")
+alt - f : @toggle_window("zoom-fullscreen")
+
+# Float/unfloat window and center on screen
+cmd - t : yabai -m window --toggle float; yabai -m window --grid 4:4:1:1:2:2
+
