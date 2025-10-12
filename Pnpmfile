@@ -1,0 +1,11 @@
+# Global pnpm packages
+# Install with: pnpm-bundle install
+# Check with: pnpm-bundle check
+
+@azure/static-web-apps-cli
+@sanity/cli
+azurite
+better-sqlite3
+nx
+pwa-asset-generator
+tsx
