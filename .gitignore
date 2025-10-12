@@ -1,0 +1,37 @@
+# Secrets and credentials
+*.secrets
+.secrets.sh
+.secrets.*
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# API keys and tokens
+*api_key*
+*apikey*
+*access_token*
+credentials.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Cache and temp
+__pycache__/
+*.pyc
+*.pyo
+*.cache
+
+# macOS specific
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
