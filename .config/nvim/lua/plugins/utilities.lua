@@ -1,4 +1,13 @@
 return {
+  -- Override vim-dadbod-ui default keymaps (from LazyVim SQL extra)
+  {
+    "kristijanhusak/vim-dadbod-ui",
+    keys = {
+      -- Explicitly disable default <leader>D keymap (using custom terminal version instead)
+      { "<leader>D", false },
+    },
+  },
+
   -- Quick notes
   {
     "letieu/jot.lua",

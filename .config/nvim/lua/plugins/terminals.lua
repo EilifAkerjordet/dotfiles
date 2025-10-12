@@ -6,8 +6,8 @@ return {
       {
         "<C-t>",
         function()
-          Snacks.terminal.toggle(nil, {
-            env = { SNACKS_TERMINAL_ID = "float" },
+          Snacks.terminal.toggle("term", {
+            env = { SNACKS_TERMINAL_ID = "term" },
             win = { position = "float", height = 0.99, width = 0.99, border = "rounded" },
           })
         end,
@@ -17,12 +17,12 @@ return {
       {
         "<leader>V",
         function()
-          Snacks.terminal.toggle(nil, {
+          Snacks.terminal.toggle("server", {
             env = { SNACKS_TERMINAL_ID = "server" },
             win = { position = "float", height = 0.99, width = 0.99, border = "rounded" },
           })
         end,
-        desc = "Toggle Terminal",
+        desc = "Toggle servers",
         mode = { "n", "t" },
       },
       {
@@ -34,6 +34,30 @@ return {
           })
         end,
         desc = "Toggle Lazydocker",
+        mode = { "n", "t" },
+        remap = true,
+      },
+      {
+        "<leader>P",
+        function()
+          Snacks.terminal.toggle("posting", {
+            env = { SNACKS_TERMINAL_ID = "posting" },
+            win = { position = "float", height = 0.99, width = 0.99, border = "rounded" },
+          })
+        end,
+        desc = "Toggle posting",
+        mode = { "n", "t" },
+        remap = true,
+      },
+      {
+        "<leader>D",
+        function()
+          Snacks.terminal.toggle({ "nvim", "-c", "DBUI" }, {
+            env = { SNACKS_TERMINAL_ID = "dadbod" },
+            win = { position = "float", height = 0.99, width = 0.99, border = "rounded" },
+          })
+        end,
+        desc = "Toggle DB UI",
         mode = { "n", "t" },
         remap = true,
       },
