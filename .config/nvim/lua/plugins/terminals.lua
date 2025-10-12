@@ -6,7 +6,7 @@ return {
       {
         "<C-t>",
         function()
-          Snacks.terminal.toggle("term", {
+          Snacks.terminal.toggle(nil, {
             env = { SNACKS_TERMINAL_ID = "term" },
             win = { position = "float", height = 0.99, width = 0.99, border = "rounded" },
           })
@@ -17,7 +17,7 @@ return {
       {
         "<leader>V",
         function()
-          Snacks.terminal.toggle("server", {
+          Snacks.terminal.toggle(nil, {
             env = { SNACKS_TERMINAL_ID = "server" },
             win = { position = "float", height = 0.99, width = 0.99, border = "rounded" },
           })
