@@ -36,3 +36,35 @@ __pycache__/
 .AppleDouble
 .LSOverride
 .tmux/plugins/*
+
+# Browser sensitive data
+**/cookies.sqlite*
+**/logins.json
+**/key*.db
+**/sessionstore*
+**/formhistory.sqlite
+**/places.sqlite*
+**/favicons.sqlite*
+**/webappsstore.sqlite*
+**/storage.sqlite*
+**/permissions.sqlite*
+**/content-prefs.sqlite*
+**/signedInUser.json
+**/extension-settings.json
+**/storage/default/**
+**/storage/permanent/**
+**/storage/temporary/**
+**/cache/**
+**/Cache/**
+**/CachedData/**
+**/Code Cache/**
+**/GPUCache/**
+**/Service Worker/**
+**/Local Storage/**
+**/IndexedDB/**
+**/Session Storage/**
+**/AlternateServices.json
+**/QuotaManager*
+**/cert*.db
+**/downloads.sqlite*
+**/handlers.json
