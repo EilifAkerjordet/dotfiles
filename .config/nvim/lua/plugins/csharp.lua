@@ -72,4 +72,17 @@ return {
       })
     end,
   },
+
+  -- neotest with dotnet adapter
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "Issafalcon/neotest-dotnet",
+    },
+    opts = {
+      adapters = {
+        ["neotest-dotnet"] = {},
+      },
+    },
+  },
 }
