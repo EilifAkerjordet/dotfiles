@@ -45,4 +45,29 @@ return {
       },
     },
   },
+  {
+    "folke/zen-mode.nvim",
+    keys = {
+      {
+        "<leader>zm",
+        function()
+          require("zen-mode").toggle()
+        end,
+      },
+    },
+    opts = {
+      window = {
+        width = 0.8,
+        height = 0.9,
+        options = {
+          number = false,
+          relativenumber = false,
+          signcolumn = "no",
+        },
+      },
+      plugins = {
+        tmux = { enabled = true },
+      },
+    },
+  },
 }
