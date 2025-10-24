@@ -2,6 +2,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
+      inlay_hints = { enabled = false },
       servers = {
         -- Tailwind with custom classRegex for Blazor Cn() function
         tailwindcss = {
