@@ -27,3 +27,9 @@ map("n", "<leader>G", "<leader>gg", { desc = "Lazy Git (cwd)", remap = true })
 -- Remove LazyVim's default <C-d>/<C-u> mappings that conflict with neoscroll
 unmap("n", "<C-d>")
 unmap("n", "<C-u>")
+
+-- Helpers
+map("i", "<C-o>", "->", { desc = "Arrow", remap = true })
+map("i", "<C-u>", "=>", { desc = "Double arrow", remap = true })
+-- map("i", "<C-8>", "(...)", { desc = "Placeholder", remap = true })
+map("i", "<C-\\>", "|>", { desc = "Placeholder", remap = true })

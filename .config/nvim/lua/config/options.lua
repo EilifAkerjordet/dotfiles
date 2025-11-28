@@ -7,5 +7,8 @@ vim.g.root_spec = { "cwd", "lsp", { ".git", "lua" } }
 
 -- Auto-reload files when changed externally
 vim.opt.autoread = true
+
+-- Disable format on save
+vim.g.autoformat = false
 vim.o.fileformat = "unix"
 vim.o.fileformats = "unix,dos"

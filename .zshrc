@@ -98,6 +98,7 @@ alias r="ranger"
 
 alias s='./vendor/bin/sail'
 alias sa='./vendor/bin/sail artisan'
+alias sc='./vendor/bin/sail composer'
 alias sad='./vendor/bin/sail artisan db'
 alias sat='./vendor/bin/sail artisan tinker'
 
@@ -115,6 +116,17 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# Android home start
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin"
+# Android home end
+
+# Java home start
+export JAVA_HOME="/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"
+export PATH="$JAVA_HOME/bin:$PATH"
+# Java home end
+
 
 # Created by `pipx` on 2024-12-06 11:36:18
 export PATH="$PATH:/Users/eilifakerjordet/.local/bin"

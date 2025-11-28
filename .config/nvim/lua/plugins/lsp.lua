@@ -64,6 +64,22 @@ return {
             },
           },
         },
+
+        -- Intelephense with license
+        intelephense = {
+          settings = {
+            intelephense = {
+              licenceKey = (function()
+                local license_file = vim.fn.expand("$HOME/intelephense/licence.txt")
+                if vim.fn.filereadable(license_file) == 1 then
+                  local lines = vim.fn.readfile(license_file)
+                  return lines[1] or ""
+                end
+                return ""
+              end)(),
+            },
+          },
+        },
       },
     },
   },
