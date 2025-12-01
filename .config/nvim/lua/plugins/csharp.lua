@@ -1,4 +1,35 @@
 return {
+  -- DLL auto-picker for .NET debugging
+  {
+    "ramboe/ramboe-dotnet-utils",
+    dependencies = { "mfussenegger/nvim-dap", "nvim-lua/plenary.nvim" },
+  },
+
+  -- netcoredbg ARM64 build for Apple Silicon
+  {
+    "Cliffback/netcoredbg-macOS-arm64.nvim",
+    dependencies = { "mfussenegger/nvim-dap" },
+    config = function()
+      local dap = require("dap")
+      -- Setup ARM64 adapter (this also sets default configs)
+      require("netcoredbg-macOS-arm64").setup()
+      -- Override with our config using autopicker
+      for _, lang in ipairs({ "cs", "fsharp", "vb" }) do
+        dap.configurations[lang] = {
+          {
+            type = "coreclr",
+            name = "Launch",
+            request = "launch",
+            program = function()
+              return require("dap-dll-autopicker").build_dll_path()
+            end,
+            cwd = "${workspaceFolder}",
+          },
+        }
+      end
+    end,
+  },
+
   -- Razor LSP support
   {
     "tris203/rzls.nvim",
